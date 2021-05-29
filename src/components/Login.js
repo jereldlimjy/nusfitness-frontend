@@ -8,7 +8,7 @@ const Login = ({ handleAlert, loggedIn, setLoggedIn }) => {
 
     const onSubmit = e => {
         e.preventDefault();
-        fetch('http://localhost:3000/login', {
+        fetch('https://salty-reaches-24995.herokuapp.com/login', {
 			method: 'post',
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify({
