@@ -1,5 +1,5 @@
-const Slot = () => {
-  return <button className="btn">0700</button>;
+const Slot = ({ hour }) => {
+  return <button className="btn">{hour}</button>;
 };
 
 export default Slot;

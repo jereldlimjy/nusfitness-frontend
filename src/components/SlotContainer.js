@@ -1,11 +1,11 @@
 import Slot from "./Slot";
 
-const SlotContainer = () => {
+const SlotContainer = ({ hours }) => {
   return (
     <div className="card all-center">
-      <Slot />
-      <Slot />
-      <Slot />
+      {hours.map((hourObject) => (
+        <Slot hour={hourObject.active && hourObject.time} />
+      ))}
     </div>
   );
 };
