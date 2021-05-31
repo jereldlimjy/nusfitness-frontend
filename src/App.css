@@ -61,6 +61,12 @@ img {
   align-items: center;
 }
 
+.border-box {
+  padding: 0;
+  border: #ccc 1px dotted;
+  margin: 0.7rem 0;
+}
+
 /* Text Styles*/
 .x-large {
   font-size: 4rem;
@@ -391,6 +397,23 @@ textarea {
 input[type="submit"],
 button {
   font: inherit;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+label {
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 5px 20px;
+  width: 100%;
+  cursor: pointer;
+}
+
+input:checked ~ label {
+  background-color: #f48221;
 }
 
 table th,

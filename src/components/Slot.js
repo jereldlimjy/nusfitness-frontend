@@ -1,8 +1,9 @@
-const Slot = ({ hour, slotsLeft }) => {
+const Slot = ({ date, hour, slotsLeft }) => {
   return (
-    <div className="card all-center">
-      <button className="btn">{hour}</button>
-      <i>{`Slots left: ${slotsLeft}`}</i>
+    <div className="border-box">
+      <input type="checkbox" id={hour + date} name={hour} />
+      <label for={hour + date}>{hour}</label>
+      <label for={hour + date}>{`${slotsLeft} Left`}</label>
     </div>
   );
 };

@@ -7,6 +7,7 @@ const SlotContainer = ({ date, hours }) => {
 
       {hours.map((hourObject) => (
         <Slot
+          date={date}
           hour={hourObject.active && hourObject.time}
           slotsLeft={hourObject.slotsLeft}
         />
