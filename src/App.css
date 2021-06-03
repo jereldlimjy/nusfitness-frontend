@@ -58,7 +58,7 @@ img {
   padding: 0 2rem;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .border-box {
