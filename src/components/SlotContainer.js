@@ -1,15 +1,15 @@
 import Slot from "./Slot";
 
-const SlotContainer = ({ date, hours }) => {
+const SlotContainer = ({ date, hours, handleChange }) => {
   return (
     <div className="card all-center">
-      <h2 className="lead">{date}</h2>
-
-      {hours.map((hourObject) => (
+      <h2 className="lead">{date.toDateString()}</h2>
+      {hours.map((hour) => (
         <Slot
-          date={date}
-          hour={hourObject.active && hourObject.time}
-          slotsLeft={hourObject.slotsLeft}
+          key={hour + date}
+          date={date.toDateString()}
+          hour={hour}
+          handleChange={handleChange}
         />
       ))}
     </div>
