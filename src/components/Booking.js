@@ -197,6 +197,31 @@ const Booking = () => {
     return date;
   };
 
+  const dates = ["3 May 2021", "4 May 2021", "5 May 2021"];
+
+  const [selectedSlots, setSelectedSlots] = useState([]);
+
+  const handleSlotChange = (e) => {
+    console.log(e);
+    // name, facility, timeBooked, date
+    // this.setSelectedSlots([...selectedSlots, ])
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(e);
+    console.log(e.target);
+  };
+
+  const [selectedHours, setSelectedHours] = useState(
+    facilityHours.poolUtownWeekday
+  );
+  const handleFacilityChange = (e) => {
+    // console.log(e.target.value);
+    // console.log(Object.entries(facilityHours)[e.target.value * 2][1]);
+    setSelectedHours(Object.entries(facilityHours)[e.target.value * 2][1]);
+    console.log(selectedHours);
+  };
+
   return (
     <div>
       <label htmlFor="facility">Select facility:</label>
