@@ -1,15 +1,16 @@
 import Slot from "./Slot";
 
-const SlotContainer = ({ date, hours, handleChange }) => {
+const SlotContainer = ({ date, hours, handleChange, selectedSlot }) => {
   return (
     <div className="card all-center">
-      <h2 className="lead">{date.toDateString()}</h2>
+      <h2 className="lead">{date}</h2>
       {hours.map((hour) => (
         <Slot
           key={hour + date}
-          date={date.toDateString()}
+          date={date}
           hour={hour}
           handleChange={handleChange}
+          checked={selectedSlot.date === date && selectedSlot.hour === hour}
         />
       ))}
     </div>

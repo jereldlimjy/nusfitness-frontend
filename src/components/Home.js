@@ -21,7 +21,7 @@ const Home = ({ handleAlert, loggedIn, setLoggedIn }) => {
     <div>
       {loggedIn ? (
         // <h1 className='text-center'>You are logged in!</h1>
-        <Booking />
+        <Booking handleAlert={handleAlert} />
       ) : (
         <h1 className="text-center">Welcome to NUSFitness! :)</h1>
       )}

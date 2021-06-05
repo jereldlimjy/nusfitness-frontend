@@ -1,11 +1,12 @@
 import { useState } from "react";
 import SlotContainer from "./SlotContainer";
 
-const Booking = () => {
+const Booking = ({ handleAlert }) => {
   // Weekday and weekend slots for all facilities
-  const facilityHours = {
-    poolKr: {
-      weekday: [
+  const facilities = [
+    {
+      name: "Kent Ridge Swimming Pool",
+      weekdayHours: [
         "0730",
         "0900",
         "1000",
@@ -20,7 +21,7 @@ const Booking = () => {
         "1900",
         "2000",
       ],
-      weekend: [
+      weekendHours: [
         "0900",
         "1000",
         "1100",
@@ -33,9 +34,9 @@ const Booking = () => {
         "1800",
       ],
     },
-
-    poolUtown: {
-      weekday: [
+    {
+      name: "University Town Swimming Pool",
+      weekdayHours: [
         "0730",
         "0900",
         "1000",
@@ -50,7 +51,7 @@ const Booking = () => {
         "1900",
         "2000",
       ],
-      weekend: [
+      weekendHours: [
         "0900",
         "1000",
         "1100",
@@ -63,9 +64,9 @@ const Booking = () => {
         "1800",
       ],
     },
-
-    gymKr: {
-      weekday: [
+    {
+      name: "Kent Ridge Gym",
+      weekdayHours: [
         "1100",
         "1200",
         "1300",
@@ -76,11 +77,11 @@ const Booking = () => {
         "1800",
         "1900",
       ],
-      weekend: [],
+      weekendHours: [],
     },
-
-    gymUsc: {
-      weekday: [
+    {
+      name: "University Sports Centre Gym",
+      weekdayHours: [
         "0900",
         "1000",
         "1100",
@@ -94,7 +95,7 @@ const Booking = () => {
         "1900",
         "2000",
       ],
-      weekend: [
+      weekendHours: [
         "0900",
         "1000",
         "1100",
@@ -107,9 +108,9 @@ const Booking = () => {
         "1800",
       ],
     },
-
-    gymUtown: {
-      weekday: [
+    {
+      name: "University Town Gym",
+      weekdayHours: [
         "0700",
         "0800",
         "0900",
@@ -126,7 +127,7 @@ const Booking = () => {
         "2000",
         "2100",
       ],
-      weekend: [
+      weekendHours: [
         "0700",
         "0800",
         "0900",
@@ -144,9 +145,9 @@ const Booking = () => {
         "2100",
       ],
     },
-
-    gymWellness: {
-      weekday: [
+    {
+      name: "Wellness Outreach Gym",
+      weekdayHours: [
         "0700",
         "0800",
         "0900",
@@ -163,28 +164,15 @@ const Booking = () => {
         "2000",
         "2100",
       ],
-      weekend: [],
+      weekendHours: [],
     },
-  };
+  ];
 
-  const [selectedHours, setSelectedHours] = useState(facilityHours.poolUtown);
-
-  const [selectedSlots, setSelectedSlots] = useState([]);
-
-  const handleSlotChange = (e) => {
-    // console.log(e);
-    // name, facility, timeBooked, date
-    // this.setSelectedSlots([...selectedSlots, ])
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(e);
-    console.log(e.target);
-  };
-
-  const handleFacilityChange = (e) => {
-    setSelectedHours(Object.entries(facilityHours)[e.target.value][1]);
-  };
+  const [selectedFacility, setSelectedFacility] = useState(facilities[0]);
+  const [selectedSlot, setSelectedSlot] = useState({
+    date: null,
+    hour: null,
+  });
 
   // Get current date and day
   const date = new Date();
@@ -197,66 +185,104 @@ const Booking = () => {
     return date;
   };
 
-  const dates = ["3 May 2021", "4 May 2021", "5 May 2021"];
-
-  const [selectedSlots, setSelectedSlots] = useState([]);
-
-  const handleSlotChange = (e) => {
-    console.log(e);
-    // name, facility, timeBooked, date
-    // this.setSelectedSlots([...selectedSlots, ])
+  // Changing facility
+  const handleFacilityChange = (e) => {
+    setSelectedFacility(facilities[e.target.value]);
+    setSelectedSlot({ date: null, hour: null });
   };
+
+  // Changing a slot
+  const handleSlotChange = (e) => {
+    const checkbox = e.target;
+
+    if (checkbox.checked) {
+      setSelectedSlot({
+        date: checkbox.attributes.date.value,
+        hour: checkbox.attributes.hour.value,
+      });
+    } else {
+      setSelectedSlot({ date: null, hour: null });
+    }
+  };
+
+  // Submit booking
+  const heroku = "https://salty-reaches-24995.herokuapp.com/book";
+  const localHost = "http://localhost:3000/book";
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(e);
-    console.log(e.target);
-  };
-
-  const [selectedHours, setSelectedHours] = useState(
-    facilityHours.poolUtownWeekday
-  );
-  const handleFacilityChange = (e) => {
-    // console.log(e.target.value);
-    // console.log(Object.entries(facilityHours)[e.target.value * 2][1]);
-    setSelectedHours(Object.entries(facilityHours)[e.target.value * 2][1]);
-    console.log(selectedHours);
+    if (selectedSlot.date !== null) {
+      console.log({
+        name: "John",
+        facility: selectedFacility.name,
+        ...selectedSlot,
+      });
+      fetch(localHost, {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "John",
+          facility: selectedFacility.name,
+          ...selectedSlot,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            handleAlert("Your slot has been booked!", "success");
+            setSelectedSlot({ date: null, hour: null });
+          }
+        })
+        .catch((err) => {
+          handleAlert("Failed to book, please try another slot :(", "danger");
+          setSelectedSlot({ date: null, hour: null });
+        });
+    } else {
+      handleAlert("Please select a slot", "danger");
+    }
   };
 
   return (
     <div>
       <label htmlFor="facility">Select facility:</label>
       <select name="facility" id="facility" onChange={handleFacilityChange}>
-        <option value={0}>Kent Ridge Swimming Pool</option>
-        <option value={1}>University Town Swimming Pool</option>
-        <option value={2}>Kent Ridge Gym</option>
-        <option value={3}>University Sports Centre Gym</option>
-        <option value={4}>University Town Gym</option>
-        <option value={5}>Wellness Outreach Gym</option>
+        <option value={0}>{facilities[0].name}</option>
+        <option value={1}>{facilities[1].name}</option>
+        <option value={2}>{facilities[2].name}</option>
+        <option value={3}>{facilities[3].name}</option>
+        <option value={4}>{facilities[4].name}</option>
+        <option value={5}>{facilities[5].name}</option>
       </select>
 
       <form onSubmit={handleSubmit} className="container-vert">
         <SlotContainer
-          date={date}
+          date={date.toDateString()}
           hours={
-            day == 0 || day == 6 ? selectedHours.weekend : selectedHours.weekday
+            day === 0 || day === 6
+              ? selectedFacility.weekendHours
+              : selectedFacility.weekdayHours
           }
           handleChange={handleSlotChange}
+          selectedSlot={selectedSlot}
         />
         <SlotContainer
-          date={date.addDays(1)}
+          date={date.addDays(1).toDateString()}
           hours={
-            (day + 1) % 7 == 0 || (day + 1) % 7 == 6
-              ? selectedHours.weekend
-              : selectedHours.weekday
+            (day + 1) % 7 === 0 || (day + 1) % 7 === 6
+              ? selectedFacility.weekendHours
+              : selectedFacility.weekdayHours
           }
+          handleChange={handleSlotChange}
+          selectedSlot={selectedSlot}
         />
         <SlotContainer
-          date={date.addDays(2)}
+          date={date.addDays(2).toDateString()}
           hours={
-            (day + 2) % 7 == 0 || (day + 2) % 7 == 6
-              ? selectedHours.weekend
-              : selectedHours.weekday
+            (day + 2) % 7 === 0 || (day + 2) % 7 === 6
+              ? selectedFacility.weekendHours
+              : selectedFacility.weekdayHours
           }
+          handleChange={handleSlotChange}
+          selectedSlot={selectedSlot}
         />
         <input type="submit" value="Submit" />
       </form>
