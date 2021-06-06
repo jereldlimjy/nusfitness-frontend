@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SlotContainer from "./SlotContainer";
 
 const Booking = ({ handleAlert }) => {
@@ -255,6 +255,7 @@ const Booking = ({ handleAlert }) => {
 
       <form onSubmit={handleSubmit} className="container-vert">
         <SlotContainer
+          facility={selectedFacility.name}
           date={date.toDateString()}
           hours={
             day === 0 || day === 6
@@ -265,6 +266,7 @@ const Booking = ({ handleAlert }) => {
           selectedSlot={selectedSlot}
         />
         <SlotContainer
+          facility={selectedFacility.name}
           date={date.addDays(1).toDateString()}
           hours={
             (day + 1) % 7 === 0 || (day + 1) % 7 === 6
@@ -275,6 +277,7 @@ const Booking = ({ handleAlert }) => {
           selectedSlot={selectedSlot}
         />
         <SlotContainer
+          facility={selectedFacility.name}
           date={date.addDays(2).toDateString()}
           hours={
             (day + 2) % 7 === 0 || (day + 2) % 7 === 6
