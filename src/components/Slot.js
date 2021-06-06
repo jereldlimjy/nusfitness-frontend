@@ -23,6 +23,11 @@ const Slot = ({ facility, date, hour, handleChange, checked }) => {
     fetchSlotsCount();
   });
 
+  // Disable current day slots whose time has elapsed
+  const hourInt = parseInt(hour.slice(0, 2));
+  const slotTime = new Date(date).setHours(hourInt + 1); // + 1 since the slot can still be booked in the 1h gap
+  const currentTime = new Date().getTime();
+
   return (
     <div className="border-box">
       <input
@@ -32,7 +37,7 @@ const Slot = ({ facility, date, hour, handleChange, checked }) => {
         hour={hour}
         onChange={handleChange}
         checked={checked}
-        disabled={slotsLeft <= 0}
+        disabled={slotsLeft <= 0 || slotTime <= currentTime}
       />
       <label htmlFor={hour + date}>{hour}</label>
       <label htmlFor={hour + date}>{`${slotsLeft} Left`}</label>
