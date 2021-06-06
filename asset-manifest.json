@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/nusfitness-frontend/static/css/main.3600b3bb.chunk.css",
-    "main.js": "/nusfitness-frontend/static/js/main.7a4e8b08.chunk.js",
-    "main.js.map": "/nusfitness-frontend/static/js/main.7a4e8b08.chunk.js.map",
-    "runtime-main.js": "/nusfitness-frontend/static/js/runtime-main.7a1dd993.js",
-    "runtime-main.js.map": "/nusfitness-frontend/static/js/runtime-main.7a1dd993.js.map",
-    "static/js/2.46c4584d.chunk.js": "/nusfitness-frontend/static/js/2.46c4584d.chunk.js",
-    "static/js/2.46c4584d.chunk.js.map": "/nusfitness-frontend/static/js/2.46c4584d.chunk.js.map",
-    "index.html": "/nusfitness-frontend/index.html",
-    "static/css/main.3600b3bb.chunk.css.map": "/nusfitness-frontend/static/css/main.3600b3bb.chunk.css.map",
-    "static/js/2.46c4584d.chunk.js.LICENSE.txt": "/nusfitness-frontend/static/js/2.46c4584d.chunk.js.LICENSE.txt"
+    "main.css": "/nusfitness/static/css/main.3600b3bb.chunk.css",
+    "main.js": "/nusfitness/static/js/main.a6733e02.chunk.js",
+    "main.js.map": "/nusfitness/static/js/main.a6733e02.chunk.js.map",
+    "runtime-main.js": "/nusfitness/static/js/runtime-main.76418528.js",
+    "runtime-main.js.map": "/nusfitness/static/js/runtime-main.76418528.js.map",
+    "static/js/2.c3f1aced.chunk.js": "/nusfitness/static/js/2.c3f1aced.chunk.js",
+    "static/js/2.c3f1aced.chunk.js.map": "/nusfitness/static/js/2.c3f1aced.chunk.js.map",
+    "index.html": "/nusfitness/index.html",
+    "static/css/main.3600b3bb.chunk.css.map": "/nusfitness/static/css/main.3600b3bb.chunk.css.map",
+    "static/js/2.c3f1aced.chunk.js.LICENSE.txt": "/nusfitness/static/js/2.c3f1aced.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.7a1dd993.js",
-    "static/js/2.46c4584d.chunk.js",
+    "static/js/runtime-main.76418528.js",
+    "static/js/2.c3f1aced.chunk.js",
     "static/css/main.3600b3bb.chunk.css",
-    "static/js/main.7a4e8b08.chunk.js"
+    "static/js/main.a6733e02.chunk.js"
   ]
 }
