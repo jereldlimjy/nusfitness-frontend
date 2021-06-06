@@ -403,6 +403,10 @@ input[type="checkbox"] {
   display: none;
 }
 
+input[type="checkbox"][disabled] ~ label {
+  color: rgb(170, 170, 170);
+}
+
 label {
   display: inline-block;
   box-sizing: border-box;

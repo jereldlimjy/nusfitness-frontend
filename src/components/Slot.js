@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 const Slot = ({ facility, date, hour, handleChange, checked }) => {
   const [slotsLeft, setSlotsLeft] = useState(0);
-  const slotsCap = 40; // TODO: different across facilities
+  const slotsCap = 20; // TODO: different across facilities
 
   const heroku = "https://salty-reaches-24995.herokuapp.com/slots";
   const localHost = "http://localhost:3000/slots";
@@ -32,6 +32,7 @@ const Slot = ({ facility, date, hour, handleChange, checked }) => {
         hour={hour}
         onChange={handleChange}
         checked={checked}
+        disabled={slotsLeft <= 0}
       />
       <label htmlFor={hour + date}>{hour}</label>
       <label htmlFor={hour + date}>{`${slotsLeft} Left`}</label>
