@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+/* @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 /* Global Styles */
 :root {
@@ -23,14 +23,14 @@ body {
   color: #333;
 }
 
-a {
+/* a {
   color: var(--primary-color);
   text-decoration: none;
 }
 
 a:hover {
   color: #666;
-}
+} */
 
 ul {
   list-style: none;

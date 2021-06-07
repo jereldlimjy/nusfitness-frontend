@@ -1,7 +1,32 @@
+import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import FormControl from '@material-ui/core/FormControl';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
+
+const useStyles = makeStyles((theme) => ({
+	root: {
+        maxWidth: "350px",
+        display: "flex",
+        flexDirection: "column",
+        border: "1px solid black",
+        padding: theme.spacing(4),
+        margin: "0 auto",
+        textAlign: "center",
+        marginTop: theme.spacing(8)
+    },
+    formControl: {
+        display: "flex",
+        marginBottom: theme.spacing(4)
+    }
+}));
 
 const Login = ({ handleAlert, loggedIn, setLoggedIn }) => {
+    const classes = useStyles();
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
     let history = useHistory();
@@ -25,27 +50,31 @@ const Login = ({ handleAlert, loggedIn, setLoggedIn }) => {
             }
         })
         .catch(err => {
-            handleAlert('Failed to login, please try again! :(', 'danger');
+            handleAlert('Failed to login, please try again! :(', 'error');
             setEmail("");
             setPassword("");
         })
     }
 
     return (
-        <div className='container'>
-            <div className='card text-center w-40 mt-3'>
-                <h2>Login</h2>
-                <form onSubmit={onSubmit} className='m-1'>
-                    <label htmlFor='email'>Email</label>
-                    <input type='text' className='mb-2' onChange={e => setEmail(e.target.value)} value={email} id='email' name='email' required/>
+        <Box className={classes.root}>
+            <Typography variant="h6">Login</Typography>
+            <form onSubmit={onSubmit}>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="email">Email</InputLabel>
+                    <Input id="email" type="email" name="email" value={email} onChange={e => setEmail(e.target.value)} required/>
+                </FormControl>
 
-                    <label htmlFor='password'>Password</label>
-                    <input type='password' onChange={e => setPassword(e.target.value)} value={password} id='password' name='password' required/>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="password">Password</InputLabel>
+                    <Input id="password" type="password" name="password" value={password} onChange={e => setPassword(e.target.value)} required/>
+                </FormControl>
 
-                    <button type='submit' onSubmit={onSubmit} className='btn btn-light mt-1'>Login</button>
-                </form>
-            </div>
-        </div>
+                <Button variant="contained" type='submit' onSubmit={onSubmit} disableElevation>
+                    Login
+                </Button>
+            </form>
+        </Box>
     )
 }
 

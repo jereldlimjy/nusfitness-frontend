@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+	root: {
+        marginTop: theme.spacing(2)
+    }
+}));
 
 const Home = ({ handleAlert, loggedIn, setLoggedIn }) => {
+    const classes = useStyles();
     // const [ loggedIn, setLoggedIn ] = useState(false);
 
     // useEffect(() => {
@@ -17,11 +26,11 @@ const Home = ({ handleAlert, loggedIn, setLoggedIn }) => {
     // }, []);
 
     return (
-        <div>
+        <div className={classes.root}>
             {loggedIn ? (
-                <h1 className='text-center'>You are logged in!</h1>
+                <Typography variant="h4" align="center">You are logged in!</Typography>
             ) : (
-                <h1 className='text-center'>Welcome to NUSFitness! :)</h1>
+                <Typography variant="h4" align="center">Welcome to NUSFitness! :)</Typography>
             )}
         </div>
     )
