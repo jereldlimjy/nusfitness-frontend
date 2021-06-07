@@ -8,13 +8,21 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		flexGrow: 1
+		flexGrow: 1,
 	},
 	title: {
-		flexGrow: 1
+		flexGrow: 1,
+	},
+	titleLink: {
+		textDecoration: "none",
+		color: "#EF7C00"
 	},
 	link: {
-		textDecoration: "none"
+		textDecoration: "none",
+		color: "white"
+	},
+	appBar: {
+		backgroundColor: "#003D7C"
 	}
 }));
 
@@ -23,10 +31,10 @@ const Navbar = ({loggedIn, setLoggedIn}) => {
 
     return (
 		<nav className={classes.root}>
-			<AppBar position="static">
+			<AppBar position="static" className={classes.appBar}>
 				<Toolbar>
 					<Typography variant="h6" className={classes.title}>
-						<Link to='/' className={classes.link}>NUSFitness</Link>
+						<Link to='/' className={classes.titleLink}>NUSFitness</Link>
 					</Typography>
 					{ loggedIn 
 						? <Button>

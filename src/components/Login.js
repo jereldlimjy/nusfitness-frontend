@@ -1,27 +1,36 @@
-import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
         maxWidth: "350px",
         display: "flex",
         flexDirection: "column",
-        border: "1px solid black",
+        border: "1px solid grey",
         padding: theme.spacing(4),
         margin: "0 auto",
         textAlign: "center",
-        marginTop: theme.spacing(8)
+        marginTop: theme.spacing(8),
     },
     formControl: {
         display: "flex",
         marginBottom: theme.spacing(4)
+    },
+    helperText: {
+        textAlign: "center",
+        marginTop: theme.spacing(2)
+    },
+    link: {
+        color: "#EF7C00",
+        textDecoration: "none"
     }
 }));
 
@@ -74,6 +83,7 @@ const Login = ({ handleAlert, loggedIn, setLoggedIn }) => {
                     Login
                 </Button>
             </form>
+            <FormHelperText className={classes.helperText}>New user? Click <Link to='/register' className={classes.link}>here</Link> to register now!</FormHelperText>
         </Box>
     )
 }
