@@ -4,18 +4,20 @@ import Booking from "./Booking";
 const Home = ({ handleAlert, loggedIn, setLoggedIn }) => {
   // const [ loggedIn, setLoggedIn ] = useState(false);
 
-  // useEffect(() => {
-  //     fetch('http://localhost:3000/isLoggedIn')
-  //     .then(res => res.json())
-  //     .then(data => {
-  //         console.log(data);
-  //         setLoggedIn(data.authenticated);
-  //     })
-  //     .catch((err) => {
-  //         console.log(err);
-  //         setLoggedIn(false);
-  //     });
-  // }, []);
+  useEffect(() => {
+    fetch("http://localhost:3000/isLoggedIn", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setLoggedIn(data.authenticated);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoggedIn(false);
+      });
+  }, []);
 
   return (
     <div>

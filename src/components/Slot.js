@@ -16,6 +16,7 @@ const Slot = ({ facility, date, hour, handleChange, checked }) => {
           date,
           hour,
         }),
+        credentials: "include",
       });
       const slotsCount = await res.json();
       setSlotsLeft(slotsCap - slotsCount);

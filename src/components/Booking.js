@@ -224,6 +224,7 @@ const Booking = ({ handleAlert }) => {
           facility: selectedFacility.name,
           ...selectedSlot,
         }),
+        credentials: "include",
       })
         .then((response) => response.json())
         .then((data) => {

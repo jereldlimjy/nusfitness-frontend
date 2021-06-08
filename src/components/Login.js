@@ -17,6 +17,7 @@ const Login = ({ handleAlert, loggedIn, setLoggedIn }) => {
         email,
         password,
       }),
+      credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => {
