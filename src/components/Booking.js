@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SlotContainer from "./SlotContainer";
 
 const Booking = ({ handleAlert }) => {
@@ -206,21 +206,19 @@ const Booking = ({ handleAlert }) => {
   };
 
   // Submit booking
-  const heroku = "https://salty-reaches-24995.herokuapp.com/book";
-  const localHost = "http://localhost:3000/book";
   const handleSubmit = (e) => {
     e.preventDefault();
     if (selectedSlot.date !== null) {
-      console.log({
-        name: "John",
-        facility: selectedFacility.name,
-        ...selectedSlot,
-      });
-      fetch(localHost, {
+      const url = `${
+        window.location.hostname === "localhost"
+          ? "http://localhost:3000/"
+          : "https://salty-reaches-24995.herokuapp.com/"
+      }book`;
+
+      fetch(url, {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "John",
           facility: selectedFacility.name,
           ...selectedSlot,
         }),

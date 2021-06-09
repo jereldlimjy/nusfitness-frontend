@@ -20,12 +20,16 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:3000/isLoggedIn", {
+    const url = `${
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000/"
+        : "https://salty-reaches-24995.herokuapp.com/"
+    }isLoggedIn`;
+    fetch(url, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setLoggedIn(data.authenticated);
       })
       .catch((err) => {

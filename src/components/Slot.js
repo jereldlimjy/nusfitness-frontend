@@ -4,11 +4,15 @@ const Slot = ({ facility, date, hour, handleChange, checked }) => {
   const [slotsLeft, setSlotsLeft] = useState(0);
   const slotsCap = 20; // TODO: different across facilities
 
-  const heroku = "https://salty-reaches-24995.herokuapp.com/slots";
-  const localHost = "http://localhost:3000/slots";
   useEffect(() => {
+    const url = `${
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000/"
+        : "https://salty-reaches-24995.herokuapp.com/"
+    }slots`;
+
     const fetchSlotsCount = async () => {
-      const res = await fetch(localHost, {
+      const res = await fetch(url, {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

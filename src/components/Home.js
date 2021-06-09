@@ -1,24 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Booking from "./Booking";
 
 const Home = ({ handleAlert, loggedIn, setLoggedIn }) => {
-  // const [ loggedIn, setLoggedIn ] = useState(false);
-
-  useEffect(() => {
-    fetch("http://localhost:3000/isLoggedIn", {
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setLoggedIn(data.authenticated);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoggedIn(false);
-      });
-  }, []);
-
   return (
     <div>
       {loggedIn ? (

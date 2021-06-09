@@ -6,11 +6,15 @@ const Login = ({ handleAlert, loggedIn, setLoggedIn }) => {
   const [password, setPassword] = useState("");
   let history = useHistory();
 
-  const heroku = "https://salty-reaches-24995.herokuapp.com/login";
-  const localHost = "http://localhost:3000/login";
   const onSubmit = (e) => {
     e.preventDefault();
-    fetch(localHost, {
+    const url = `${
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000/"
+        : "https://salty-reaches-24995.herokuapp.com/"
+    }login`;
+
+    fetch(url, {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
