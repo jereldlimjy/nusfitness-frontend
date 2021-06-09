@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 
-const Slot = ({ facility, date, hour, handleChange, checked }) => {
+const Slot = ({ facility, date, hour, handleChange, checked, disabled }) => {
   const [slotsLeft, setSlotsLeft] = useState(0);
   const slotsCap = 20; // TODO: different across facilities
-
+  console.log(disabled);
   useEffect(() => {
     const url = `${
       window.location.hostname === "localhost"
@@ -42,7 +42,7 @@ const Slot = ({ facility, date, hour, handleChange, checked }) => {
         hour={hour}
         onChange={handleChange}
         checked={checked}
-        disabled={slotsLeft <= 0 || slotTime <= currentTime}
+        disabled={slotsLeft <= 0 || slotTime <= currentTime || disabled}
       />
       <label htmlFor={hour + date}>{hour}</label>
       <label htmlFor={hour + date}>{`${slotsLeft} Left`}</label>

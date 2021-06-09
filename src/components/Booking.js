@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import SlotContainer from "./SlotContainer";
 
 const Booking = ({ handleAlert }) => {
@@ -173,6 +173,7 @@ const Booking = ({ handleAlert }) => {
     date: null,
     hour: null,
   });
+  const [bookedSlots, setBookedSlots] = useState([]);
 
   // Get current date and day
   const date = new Date();
@@ -206,39 +207,58 @@ const Booking = ({ handleAlert }) => {
   };
 
   // Submit booking
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (selectedSlot.date !== null) {
-      const url = `${
-        window.location.hostname === "localhost"
-          ? "http://localhost:3000/"
-          : "https://salty-reaches-24995.herokuapp.com/"
-      }book`;
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (selectedSlot.date !== null) {
+        const url = `${
+          window.location.hostname === "localhost"
+            ? "http://localhost:3000/"
+            : "https://salty-reaches-24995.herokuapp.com/"
+        }book`;
 
-      fetch(url, {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          facility: selectedFacility.name,
-          ...selectedSlot,
-        }),
-        credentials: "include",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            handleAlert("Your slot has been booked!", "success");
-            setSelectedSlot({ date: null, hour: null });
-          }
+        fetch(url, {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            facility: selectedFacility.name,
+            ...selectedSlot,
+          }),
+          credentials: "include",
         })
-        .catch((err) => {
-          handleAlert("Failed to book, please try another slot :(", "danger");
-          setSelectedSlot({ date: null, hour: null });
-        });
-    } else {
-      handleAlert("Please select a slot", "danger");
-    }
-  };
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              handleAlert("Your slot has been booked!", "success");
+              setSelectedSlot({ date: null, hour: null });
+            }
+          })
+          .catch((err) => {
+            handleAlert("Failed to book, please try another slot :(", "danger");
+            setSelectedSlot({ date: null, hour: null });
+          });
+      } else {
+        handleAlert("Please select a slot", "danger");
+      }
+    },
+    [handleAlert, selectedFacility.name, selectedSlot]
+  );
+
+  // Retrieve booked slots
+  useEffect(() => {
+    const url = `${
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000/"
+        : "https://salty-reaches-24995.herokuapp.com/"
+    }bookedSlots`;
+    fetch(url, {
+      method: "get",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((res) => setBookedSlots(res))
+      .catch((err) => console.log(err));
+  }, [handleSubmit]);
 
   return (
     <div>
@@ -263,6 +283,9 @@ const Booking = ({ handleAlert }) => {
           }
           handleChange={handleSlotChange}
           selectedSlot={selectedSlot}
+          bookedSlots={bookedSlots.filter(
+            (slot) => slot.facility === selectedFacility.name
+          )}
         />
         <SlotContainer
           facility={selectedFacility.name}
@@ -274,6 +297,9 @@ const Booking = ({ handleAlert }) => {
           }
           handleChange={handleSlotChange}
           selectedSlot={selectedSlot}
+          bookedSlots={bookedSlots.filter(
+            (slot) => slot.facility === selectedFacility.name
+          )}
         />
         <SlotContainer
           facility={selectedFacility.name}
@@ -285,6 +311,9 @@ const Booking = ({ handleAlert }) => {
           }
           handleChange={handleSlotChange}
           selectedSlot={selectedSlot}
+          bookedSlots={bookedSlots.filter(
+            (slot) => slot.facility === selectedFacility.name
+          )}
         />
         <input type="submit" value="Submit" />
       </form>

@@ -6,6 +6,7 @@ const SlotContainer = ({
   hours,
   handleChange,
   selectedSlot,
+  bookedSlots,
 }) => {
   return (
     <div className="card all-center">
@@ -18,6 +19,11 @@ const SlotContainer = ({
           hour={hour}
           handleChange={handleChange}
           checked={selectedSlot.date === date && selectedSlot.hour === hour}
+          disabled={
+            bookedSlots.filter(
+              (slot) => slot.date === date && slot.hour === hour
+            ).length > 0
+          }
         />
       ))}
     </div>
