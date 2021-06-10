@@ -18,7 +18,11 @@ const SlotContainer = ({
           date={date}
           hour={hour}
           handleChange={handleChange}
-          checked={selectedSlot.date === date && selectedSlot.hour === hour}
+          checked={
+            selectedSlot &&
+            selectedSlot.date === date &&
+            selectedSlot.hour === hour
+          }
           disabled={
             bookedSlots.filter(
               (slot) => slot.date === date && slot.hour === hour

@@ -168,19 +168,15 @@ const Booking = ({ handleAlert }) => {
     },
   ];
 
-  const [selectedFacility, setSelectedFacility] = useState(facilities[0]);
-  const [selectedSlot, setSelectedSlot] = useState({
-    date: null,
-    hour: null,
-  });
+  const [facility, setfacility] = useState(facilities[0]);
+  const [selectedSlot, setSelectedSlot] = useState();
   const [bookedSlots, setBookedSlots] = useState([]);
 
-  // Get current date and day
+  // Date object
   const date = new Date();
   const day = date.getDay();
-
-  // addDays function
   Date.prototype.addDays = (days) => {
+    /*eslint no-extend-native: ["error", { "exceptions": ["Date"] }]*/
     const date = new Date();
     date.setDate(date.getDate() + days);
     return date;
@@ -188,8 +184,8 @@ const Booking = ({ handleAlert }) => {
 
   // Changing facility
   const handleFacilityChange = (e) => {
-    setSelectedFacility(facilities[e.target.value]);
-    setSelectedSlot({ date: null, hour: null });
+    setfacility(facilities[e.target.value]);
+    setSelectedSlot();
   };
 
   // Changing a slot
@@ -202,7 +198,7 @@ const Booking = ({ handleAlert }) => {
         hour: checkbox.attributes.hour.value,
       });
     } else {
-      setSelectedSlot({ date: null, hour: null });
+      setSelectedSlot();
     }
   };
 
@@ -221,7 +217,7 @@ const Booking = ({ handleAlert }) => {
           method: "post",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            facility: selectedFacility.name,
+            facility: facility.name,
             ...selectedSlot,
           }),
           credentials: "include",
@@ -230,18 +226,18 @@ const Booking = ({ handleAlert }) => {
           .then((data) => {
             if (data.success) {
               handleAlert("Your slot has been booked!", "success");
-              setSelectedSlot({ date: null, hour: null });
+              setSelectedSlot();
             }
           })
           .catch((err) => {
             handleAlert("Failed to book, please try another slot :(", "danger");
-            setSelectedSlot({ date: null, hour: null });
+            setSelectedSlot();
           });
       } else {
         handleAlert("Please select a slot", "danger");
       }
     },
-    [handleAlert, selectedFacility.name, selectedSlot]
+    [handleAlert, facility.name, selectedSlot]
   );
 
   // Retrieve booked slots
@@ -252,13 +248,36 @@ const Booking = ({ handleAlert }) => {
         : "https://salty-reaches-24995.herokuapp.com/"
     }bookedSlots`;
     fetch(url, {
-      method: "get",
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        facility: facility.name,
+      }),
       credentials: "include",
     })
       .then((res) => res.json())
       .then((res) => setBookedSlots(res))
       .catch((err) => console.log(err));
   }, [handleSubmit]);
+
+  const slotContainers = [];
+  for (let i = 0; i < 3; i++) {
+    slotContainers[i] = (
+      <SlotContainer
+        key={date.addDays(i).toDateString()}
+        facility={facility.name}
+        date={date.addDays(i).toDateString()}
+        hours={
+          (day + i) % 7 === 0 || (day + i) % 7 === 6
+            ? facility.weekendHours
+            : facility.weekdayHours
+        }
+        handleChange={handleSlotChange}
+        selectedSlot={selectedSlot}
+        bookedSlots={bookedSlots}
+      />
+    );
+  }
 
   return (
     <div>
@@ -273,48 +292,7 @@ const Booking = ({ handleAlert }) => {
       </select>
 
       <form onSubmit={handleSubmit} className="container-vert">
-        <SlotContainer
-          facility={selectedFacility.name}
-          date={date.toDateString()}
-          hours={
-            day === 0 || day === 6
-              ? selectedFacility.weekendHours
-              : selectedFacility.weekdayHours
-          }
-          handleChange={handleSlotChange}
-          selectedSlot={selectedSlot}
-          bookedSlots={bookedSlots.filter(
-            (slot) => slot.facility === selectedFacility.name
-          )}
-        />
-        <SlotContainer
-          facility={selectedFacility.name}
-          date={date.addDays(1).toDateString()}
-          hours={
-            (day + 1) % 7 === 0 || (day + 1) % 7 === 6
-              ? selectedFacility.weekendHours
-              : selectedFacility.weekdayHours
-          }
-          handleChange={handleSlotChange}
-          selectedSlot={selectedSlot}
-          bookedSlots={bookedSlots.filter(
-            (slot) => slot.facility === selectedFacility.name
-          )}
-        />
-        <SlotContainer
-          facility={selectedFacility.name}
-          date={date.addDays(2).toDateString()}
-          hours={
-            (day + 2) % 7 === 0 || (day + 2) % 7 === 6
-              ? selectedFacility.weekendHours
-              : selectedFacility.weekdayHours
-          }
-          handleChange={handleSlotChange}
-          selectedSlot={selectedSlot}
-          bookedSlots={bookedSlots.filter(
-            (slot) => slot.facility === selectedFacility.name
-          )}
-        />
+        {slotContainers}
         <input type="submit" value="Submit" />
       </form>
     </div>

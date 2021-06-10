@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 const Slot = ({ facility, date, hour, handleChange, checked, disabled }) => {
   const [slotsLeft, setSlotsLeft] = useState(0);
   const slotsCap = 20; // TODO: different across facilities
-  console.log(disabled);
+
   useEffect(() => {
     const url = `${
       window.location.hostname === "localhost"
