@@ -284,8 +284,10 @@ const Booking = ({ handleAlert }) => {
           .then((data) => {
             if (data.success) {
               handleAlert("Your slot has been booked!", "success");
-              setSelectedSlot({});
+            } else {
+              handleAlert("Slot has been fully booked.", "danger");
             }
+            setSelectedSlot({});
           })
           .catch((err) => {
             console.log(err);
