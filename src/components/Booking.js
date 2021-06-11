@@ -169,8 +169,9 @@ const Booking = ({ handleAlert }) => {
   ];
 
   const [facility, setfacility] = useState(facilities[0]);
-  const [selectedSlot, setSelectedSlot] = useState();
+  const [selectedSlot, setSelectedSlot] = useState({});
   const [bookedSlots, setBookedSlots] = useState([]);
+  const [submitValue, setSubmitValue] = useState("Book");
 
   // Date object
   const date = new Date();
@@ -185,7 +186,7 @@ const Booking = ({ handleAlert }) => {
   // Changing facility
   const handleFacilityChange = (e) => {
     setfacility(facilities[e.target.value]);
-    setSelectedSlot();
+    setSelectedSlot({});
   };
 
   // Changing a slot
@@ -198,15 +199,72 @@ const Booking = ({ handleAlert }) => {
         hour: checkbox.attributes.hour.value,
       });
     } else {
-      setSelectedSlot();
+      setSelectedSlot({});
     }
+
+    // Update submit value
+    const selectedSlot = {
+      date: checkbox.attributes.date.value,
+      hour: checkbox.attributes.hour.value,
+    };
+    Object.keys(selectedSlot).length !== 0 &&
+      (bookedSlots.find(
+        (slot) =>
+          slot.date === selectedSlot.date && slot.hour === selectedSlot.hour
+      )
+        ? setSubmitValue("Cancel")
+        : setSubmitValue("Book"));
   };
 
   // Submit booking
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      if (selectedSlot.date !== null) {
+      if (submitValue === "Cancel") {
+        const url = `${
+          window.location.hostname === "localhost"
+            ? "http://localhost:3000/"
+            : "https://salty-reaches-24995.herokuapp.com/"
+        }cancel`;
+
+        fetch(url, {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            facility: facility.name,
+            ...selectedSlot,
+          }),
+          credentials: "include",
+        })
+          .then((response) => {
+            if (response.status === 401) {
+              handleAlert(
+                "You are unauthorised to cancel the slot. Please contact the website's administrator",
+                "danger"
+              );
+            } else if (response.status === 403) {
+              handleAlert(
+                "Unable to cancel slot because it is within the 2 hour cancellation window.",
+                "danger"
+              );
+            } else if (response.status === 404) {
+              handleAlert(
+                "Slot cannot be found. Please contact the website's administrator",
+                "danger"
+              );
+            }
+            setSelectedSlot({});
+            return response.json();
+          })
+          .then((data) => {
+            if (data.success) {
+              handleAlert("Your slot has been cancelled.", "success");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
         const url = `${
           window.location.hostname === "localhost"
             ? "http://localhost:3000/"
@@ -226,18 +284,15 @@ const Booking = ({ handleAlert }) => {
           .then((data) => {
             if (data.success) {
               handleAlert("Your slot has been booked!", "success");
-              setSelectedSlot();
+              setSelectedSlot({});
             }
           })
           .catch((err) => {
-            handleAlert("Failed to book, please try another slot :(", "danger");
-            setSelectedSlot();
+            console.log(err);
           });
-      } else {
-        handleAlert("Please select a slot", "danger");
       }
     },
-    [handleAlert, facility.name, selectedSlot]
+    [submitValue, handleAlert, facility.name, selectedSlot]
   );
 
   // Retrieve booked slots
@@ -258,7 +313,7 @@ const Booking = ({ handleAlert }) => {
       .then((res) => res.json())
       .then((res) => setBookedSlots(res))
       .catch((err) => console.log(err));
-  }, [handleSubmit]);
+  }, [handleSubmit, facility.name]);
 
   const slotContainers = [];
   for (let i = 0; i < 3; i++) {
@@ -293,7 +348,9 @@ const Booking = ({ handleAlert }) => {
 
       <form onSubmit={handleSubmit} className="container-vert">
         {slotContainers}
-        <input type="submit" value="Submit" />
+        {Object.keys(selectedSlot).length !== 0 && (
+          <input type="submit" value={submitValue} />
+        )}
       </form>
     </div>
   );

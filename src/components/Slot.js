@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const Slot = ({ facility, date, hour, handleChange, checked, disabled }) => {
+const Slot = ({ facility, date, hour, handleChange, checked, booked }) => {
   const [slotsLeft, setSlotsLeft] = useState(0);
   const slotsCap = 20; // TODO: different across facilities
 
@@ -42,7 +42,8 @@ const Slot = ({ facility, date, hour, handleChange, checked, disabled }) => {
         hour={hour}
         onChange={handleChange}
         checked={checked}
-        disabled={slotsLeft <= 0 || slotTime <= currentTime || disabled}
+        disabled={slotsLeft <= 0 || slotTime <= currentTime}
+        booked={booked.toString()}
       />
       <label htmlFor={hour + date}>{hour}</label>
       <label htmlFor={hour + date}>{`${slotsLeft} Left`}</label>

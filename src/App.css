@@ -407,6 +407,10 @@ input[type="checkbox"][disabled] ~ label {
   color: rgb(170, 170, 170);
 }
 
+input[type="checkbox"][booked="true"] ~ label {
+  background-color: forestgreen;
+}
+
 label {
   display: inline-block;
   box-sizing: border-box;
@@ -416,8 +420,9 @@ label {
   cursor: pointer;
 }
 
+input[type="checkbox"][booked="true"]:checked ~ label,
 input:checked ~ label {
-  background-color: #f48221;
+  background-color: #ef7c00;
 }
 
 table th,
