@@ -1,4 +1,4 @@
-/* @import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url("https://fonts.googleapis.com/css?family=Roboto");
 
 /* Global Styles */
 :root {
@@ -16,7 +16,7 @@
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 1rem;
   line-height: 1.6;
   background-color: #fff;
@@ -49,6 +49,22 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.container-vert {
+  max-width: 600px;
+  margin: auto;
+  overflow: hidden;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.border-box {
+  padding: 0;
+  border: #ccc 1px dotted;
+  margin: 0.7rem 0;
 }
 
 /* Text Styles*/
@@ -365,10 +381,10 @@ img {
   color: #888;
 }
 
-input[type='text'],
-input[type='email'],
-input[type='password'],
-input[type='date'],
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
 select,
 textarea {
   display: block;
@@ -378,9 +394,35 @@ textarea {
   border: 1px solid #ccc;
 }
 
-input[type='submit'],
+input[type="submit"],
 button {
   font: inherit;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"][disabled] ~ label {
+  color: rgb(170, 170, 170);
+}
+
+input[type="checkbox"][booked="true"] ~ label {
+  background-color: forestgreen;
+}
+
+label {
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 5px 20px;
+  width: 100%;
+  cursor: pointer;
+}
+
+input[type="checkbox"][booked="true"]:checked ~ label,
+input:checked ~ label {
+  background-color: #ef7c00;
 }
 
 table th,
