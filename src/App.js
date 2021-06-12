@@ -39,7 +39,7 @@ const theme = createMuiTheme({
 
 const App = () => {
   const [alert, setAlert] = useState(null);
-  const [loggedIn, setLoggedIn] = useState(undefined);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleAlert = (msg, type) => {
     setAlert({ msg, type });
@@ -76,13 +76,11 @@ const App = () => {
           <Alert alert={alert} />
           <Switch>
             <Route exact path="/">
-              {loggedIn && (
-                <Home
-                  handleAlert={handleAlert}
-                  loggedIn={loggedIn}
-                  setLoggedIn={setLoggedIn}
-                />
-              )}
+              <Home
+                handleAlert={handleAlert}
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+              />
             </Route>
             <Route exact path="/register">
               <Register

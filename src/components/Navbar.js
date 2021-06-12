@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = ({ loggedIn, setLoggedIn }) => {
   const classes = useStyles();
 
-  const handleOnClick = (e) => {
+  const handleLogout = (e) => {
     e.preventDefault();
     const url = `${
       window.location.hostname === "localhost"
@@ -53,7 +53,7 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
           </Typography>
           {loggedIn ? (
             <Button>
-              <Link to="/" onClick={handleOnClick} className={classes.link}>
+              <Link to="/" onClick={handleLogout} className={classes.link}>
                 Logout
               </Link>
             </Button>
