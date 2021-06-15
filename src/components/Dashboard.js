@@ -51,15 +51,22 @@ const Dashboard = () => {
     setTime(21, 0),
   ];
 
-  console.log(
-    new Date()
-      .toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      })
-      .replace(":", "")
-  );
+  const url = `${
+    window.location.hostname === "localhost"
+      ? "http://localhost:5000/"
+      : "https://salty-reaches-24995.herokuapp.com/"
+  }traffic`;
+  fetch(url, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      date: { $lte: new Date(2021, 5, 15, 22) },
+    }),
+  })
+    .then((res) => res.json())
+    .then((res) => console.log(res));
 
   return (
     <div className="container">
