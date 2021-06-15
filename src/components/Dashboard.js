@@ -5,6 +5,7 @@ import {
   VictoryTheme,
   VictoryContainer,
   VictoryLabel,
+  VictoryVoronoiContainer,
 } from "victory";
 
 const Dashboard = () => {
@@ -72,6 +73,20 @@ const Dashboard = () => {
     <div className="container">
       <VictoryChart
         theme={VictoryTheme.material}
+        containerComponent={
+          <VictoryVoronoiContainer
+            labels={(obj) =>
+              `Time: ${obj.datum.date
+                .toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })
+                .replace(":", "")}, Count: ${obj.datum.count}`
+            }
+            radius={25}
+          />
+        }
         minDomain={{ x: setTime(7, 0), y: 0 }}
         maxDomain={{ x: setTime(22, 0), y: 40 }}
         height={300}
