@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   VictoryLine,
   VictoryChart,
@@ -9,32 +10,14 @@ import {
 } from "victory";
 
 const Dashboard = () => {
+  const [data, setData] = useState([]);
+
   // To simulate time data
   const setTime = (h, m) => {
     const date = new Date();
-    date.setHours(h, m);
+    date.setHours(h, m, 0, 0);
     return date;
   };
-
-  const data = [
-    { date: setTime(7, 30), count: 20 },
-    { date: setTime(7, 35), count: 20 },
-    { date: setTime(7, 40), count: 20 },
-    { date: setTime(7, 45), count: 20 },
-    { date: setTime(7, 50), count: 20 },
-    { date: setTime(7, 55), count: 20 },
-    { date: setTime(8, 0), count: 25 },
-    { date: setTime(8, 30), count: 27 },
-    { date: setTime(9, 0), count: 23 },
-    { date: setTime(9, 30), count: 17 },
-    { date: setTime(10, 0), count: 12 },
-    { date: setTime(10, 30), count: 5 },
-    { date: setTime(11, 0), count: 4 },
-    { date: setTime(11, 30), count: 7 },
-    { date: setTime(12, 0), count: 10 },
-    { date: setTime(12, 30), count: 25 },
-    { date: setTime(13, 0), count: 39 },
-  ];
   const tickValues = [
     setTime(8, 0),
     setTime(9, 0),
@@ -52,23 +35,36 @@ const Dashboard = () => {
     setTime(21, 0),
   ];
 
-  const url = `${
-    window.location.hostname === "localhost"
-      ? "http://localhost:5000/"
-      : "https://salty-reaches-24995.herokuapp.com/"
-  }traffic`;
-  fetch(url, {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      date: { $lte: new Date(2021, 5, 15, 22) },
-    }),
-  })
-    .then((res) => res.json())
-    .then((res) => console.log(res));
+  useEffect(() => {
+    const url = `${
+      window.location.hostname === "localhost"
+        ? "http://localhost:5000/"
+        : "https://salty-reaches-24995.herokuapp.com/"
+    }traffic`;
+    fetch(url, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        date: { $gte: new Date(2021, 5, 16), $lte: new Date(2021, 5, 17) },
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setData(
+          res.map((e) => {
+            const date = new Date(e.date);
+            return {
+              date: setTime(date.getHours(), date.getMinutes()),
+              count: e.traffic[0],
+            };
+          })
+        );
+      });
+  }, []);
 
+  console.log(data);
   return (
     <div className="container">
       <VictoryChart
@@ -91,7 +87,6 @@ const Dashboard = () => {
         maxDomain={{ x: setTime(22, 0), y: 40 }}
         height={300}
         width={900}
-        // padding={{ left: 70, right: 10, top: 10, bottom: 10 }}
       >
         <VictoryAxis
           label="Time"
