@@ -10,6 +10,16 @@ import {
 } from "victory";
 
 const Dashboard = () => {
+  const facilities = [
+    "Kent Ridge Swimming Pool",
+    "University Town Swimming Pool",
+    "Kent Ridge Gym",
+    "University Sports Centre Gym",
+    "University Town Gym",
+    "Wellness Outreach Gym",
+  ];
+  const [facility, setFacility] = useState(facilities[0]);
+  const [fetchedData, setFetchedData] = useState([]);
   const [data, setData] = useState([]);
 
   // To simulate time data
@@ -35,6 +45,12 @@ const Dashboard = () => {
     setTime(21, 0),
   ];
 
+  // Changing facility
+  const handleFacilityChange = (e) => {
+    setFacility(facilities[e.target.value]);
+  };
+
+  // Fetch filtered data
   useEffect(() => {
     const url = `${
       window.location.hostname === "localhost"
@@ -52,21 +68,41 @@ const Dashboard = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setData(
+        setFetchedData(
           res.map((e) => {
             const date = new Date(e.date);
             return {
               date: setTime(date.getHours(), date.getMinutes()),
-              count: e.traffic[0],
+              countArray: e.traffic,
             };
           })
         );
       });
   }, []);
 
+  // Set facility traffic
+  useEffect(() => {
+    setData(
+      fetchedData.map((e) => ({
+        date: e.date,
+        count: e.countArray[facilities.indexOf(facility)],
+      }))
+    );
+  }, [fetchedData, facility]);
+
   console.log(data);
   return (
     <div className="container">
+      <label htmlFor="facility">Select facility:</label>
+      <select name="facility" id="facility" onChange={handleFacilityChange}>
+        <option value={0}>{facilities[0]}</option>
+        <option value={1}>{facilities[1]}</option>
+        <option value={2}>{facilities[2]}</option>
+        <option value={3}>{facilities[3]}</option>
+        <option value={4}>{facilities[4]}</option>
+        <option value={5}>{facilities[5]}</option>
+      </select>
+
       <VictoryChart
         theme={VictoryTheme.material}
         containerComponent={
