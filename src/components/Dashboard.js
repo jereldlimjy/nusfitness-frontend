@@ -1,13 +1,9 @@
-import { useEffect, useState } from "react";
-import {
-  VictoryLine,
-  VictoryChart,
-  VictoryAxis,
-  VictoryTheme,
-  VictoryContainer,
-  VictoryLabel,
-  VictoryVoronoiContainer,
-} from "victory";
+import "react-date-range/dist/styles.css"; // main css file
+import "react-date-range/dist/theme/default.css"; // theme css fileimport { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { addDays } from "date-fns";
+import Calendar from "./Calendar";
+import Chart from "./Chart";
 
 const Dashboard = () => {
   const facilities = [
@@ -21,6 +17,13 @@ const Dashboard = () => {
   const [facility, setFacility] = useState(facilities[0]);
   const [fetchedData, setFetchedData] = useState([]);
   const [data, setData] = useState([]);
+  const [selectedDates, setSelectedDates] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
 
   // To simulate time data
   const setTime = (h, m) => {
@@ -28,22 +31,6 @@ const Dashboard = () => {
     date.setHours(h, m, 0, 0);
     return date;
   };
-  const tickValues = [
-    setTime(8, 0),
-    setTime(9, 0),
-    setTime(10, 0),
-    setTime(11, 0),
-    setTime(12, 0),
-    setTime(13, 0),
-    setTime(14, 0),
-    setTime(15, 0),
-    setTime(16, 0),
-    setTime(17, 0),
-    setTime(18, 0),
-    setTime(19, 0),
-    setTime(20, 0),
-    setTime(21, 0),
-  ];
 
   // Changing facility
   const handleFacilityChange = (e) => {
@@ -52,6 +39,11 @@ const Dashboard = () => {
 
   // Fetch filtered data
   useEffect(() => {
+    // Retrieve filtered dates
+    const [dateRange] = selectedDates;
+    const startDate = dateRange.startDate;
+    const endDate = addDays(dateRange.endDate, 1);
+
     const url = `${
       window.location.hostname === "localhost"
         ? "http://localhost:5000/"
@@ -63,7 +55,7 @@ const Dashboard = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        date: { $gte: new Date(2021, 5, 16), $lte: new Date(2021, 5, 17) },
+        date: { $gte: startDate, $lte: endDate },
       }),
     })
       .then((res) => res.json())
@@ -78,19 +70,42 @@ const Dashboard = () => {
           })
         );
       });
-  }, []);
+  }, [selectedDates]);
 
   // Set facility traffic
   useEffect(() => {
-    setData(
-      fetchedData.map((e) => ({
-        date: e.date,
-        count: e.countArray[facilities.indexOf(facility)],
-      }))
-    );
+    const facilityTraffic = fetchedData.map((e) => ({
+      date: e.date,
+      count: e.countArray[facilities.indexOf(facility)],
+    }));
+
+    // Group by date function
+    function groupByDate(traffic) {
+      return traffic.reduce((arr, obj) => {
+        const date = obj.date;
+        let matchedObj = arr.find((e) => e.date.getTime() === date.getTime());
+        if (matchedObj) {
+          matchedObj.countArray.push(obj.count);
+        } else {
+          arr.push({ date, countArray: [obj.count] });
+        }
+        return arr;
+      }, []);
+    }
+
+    // Aggregate counts across dates
+    const groupedArray = groupByDate(facilityTraffic);
+    const aggregatedArray = groupedArray.map((e) => {
+      const countArray = e.countArray;
+      const sum = countArray.reduce((a, b) => a + b, 0);
+      const avg = sum / countArray.length;
+      const rounded = Math.round(avg * 10) / 10;
+      return { date: e.date, count: rounded };
+    });
+
+    setData(aggregatedArray);
   }, [fetchedData, facility]);
 
-  console.log(data);
   return (
     <div className="container">
       <label htmlFor="facility">Select facility:</label>
@@ -103,53 +118,12 @@ const Dashboard = () => {
         <option value={5}>{facilities[5]}</option>
       </select>
 
-      <VictoryChart
-        theme={VictoryTheme.material}
-        containerComponent={
-          <VictoryVoronoiContainer
-            labels={(obj) =>
-              `Time: ${obj.datum.date
-                .toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: false,
-                })
-                .replace(":", "")}, Count: ${obj.datum.count}`
-            }
-            radius={25}
-          />
-        }
-        minDomain={{ x: setTime(7, 0), y: 0 }}
-        maxDomain={{ x: setTime(22, 0), y: 40 }}
-        height={300}
-        width={900}
-      >
-        <VictoryAxis
-          label="Time"
-          tickValues={tickValues}
-          tickFormat={(date) => {
-            return new Date(date)
-              .toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })
-              .replace(":", "");
-          }}
-          axisLabelComponent={<VictoryLabel dy={30} />}
-        />
-        <VictoryAxis
-          dependentAxis
-          label={"Capacity"}
-          axisLabelComponent={<VictoryLabel dy={-30} />}
-        />
-        <VictoryLine
-          data={data}
-          x="date"
-          y="count"
-          scale={{ x: "time", y: "linear" }}
-        ></VictoryLine>
-      </VictoryChart>
+      <Calendar
+        selectedDates={selectedDates}
+        setSelectedDates={setSelectedDates}
+      />
+
+      <Chart setTime={setTime} data={data} />
     </div>
   );
 };

@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = ({ handleAlert, loggedIn, setLoggedIn }) => {
   const classes = useStyles();
-  console.log(loggedIn);
+
   return (
     <div className={classes.root}>
       {loggedIn ? <Booking handleAlert={handleAlert} /> : <Dashboard />}
