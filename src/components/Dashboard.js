@@ -15,7 +15,6 @@ const Dashboard = () => {
     "Wellness Outreach Gym",
   ];
   const [facility, setFacility] = useState(facilities[0]);
-  const [fetchedData, setFetchedData] = useState([]);
   const [data, setData] = useState([]);
   const [selectedDates, setSelectedDates] = useState([
     {
@@ -55,56 +54,20 @@ const Dashboard = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        facility: facilities.indexOf(facility),
         date: { $gte: startDate, $lte: endDate },
       }),
     })
       .then((res) => res.json())
-      .then((res) => {
-        setFetchedData(
-          res.map((e) => {
-            const date = new Date(e.date);
-            return {
-              date: setTime(date.getHours(), date.getMinutes()),
-              countArray: e.traffic,
-            };
-          })
-        );
-      });
-  }, [selectedDates]);
-
-  // Set facility traffic
-  useEffect(() => {
-    const facilityTraffic = fetchedData.map((e) => ({
-      date: e.date,
-      count: e.countArray[facilities.indexOf(facility)],
-    }));
-
-    // Group by date function
-    function groupByDate(traffic) {
-      return traffic.reduce((arr, obj) => {
-        const date = obj.date;
-        let matchedObj = arr.find((e) => e.date.getTime() === date.getTime());
-        if (matchedObj) {
-          matchedObj.countArray.push(obj.count);
-        } else {
-          arr.push({ date, countArray: [obj.count] });
-        }
-        return arr;
-      }, []);
-    }
-
-    // Aggregate counts across dates
-    const groupedArray = groupByDate(facilityTraffic);
-    const aggregatedArray = groupedArray.map((e) => {
-      const countArray = e.countArray;
-      const sum = countArray.reduce((a, b) => a + b, 0);
-      const avg = sum / countArray.length;
-      const rounded = Math.round(avg * 10) / 10;
-      return { date: e.date, count: rounded };
-    });
-
-    setData(aggregatedArray);
-  }, [fetchedData, facility]);
+      .then((res) =>
+        setData(
+          res.map((e) => ({
+            date: new Date(e.date),
+            count: e.count,
+          }))
+        )
+      );
+  }, [selectedDates, facility]);
 
   return (
     <div className="container">

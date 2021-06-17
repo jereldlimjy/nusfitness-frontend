@@ -7,6 +7,7 @@ const Calendar = ({ selectedDates, setSelectedDates }) => {
       showSelectionPreview={true}
       moveRangeOnFirstSelection={false}
       months={1}
+      maxDate={new Date()}
       ranges={selectedDates}
       direction="horizontal"
     />
