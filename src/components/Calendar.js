@@ -1,4 +1,5 @@
 import { DateRangePicker } from "react-date-range";
+import { defaultInputRanges } from "react-date-range";
 
 const Calendar = ({ selectedDates, setSelectedDates }) => {
   return (
@@ -9,6 +10,7 @@ const Calendar = ({ selectedDates, setSelectedDates }) => {
       months={1}
       maxDate={new Date()}
       ranges={selectedDates}
+      inputRanges={defaultInputRanges.slice(0, 1)}
       direction="horizontal"
     />
   );

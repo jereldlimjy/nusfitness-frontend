@@ -24,23 +24,23 @@ const Dashboard = () => {
     "Saturday",
   ];
 
-  const [facility, setFacility] = useState(facilities[0]);
-  const [data, setData] = useState([]);
-  const [selectedDates, setSelectedDates] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
-  const [dayOfWeek, setDayOfWeek] = useState([1, 2, 3, 4, 5, 6, 7]);
-
   // To simulate time data
   const setTime = (h, m) => {
     const date = new Date();
     date.setHours(h, m, 0, 0);
     return date;
   };
+
+  const [facility, setFacility] = useState(facilities[0]);
+  const [data, setData] = useState([]);
+  const [selectedDates, setSelectedDates] = useState([
+    {
+      startDate: setTime(0, 0),
+      endDate: setTime(0, 0),
+      key: "selection",
+    },
+  ]);
+  const [dayOfWeek, setDayOfWeek] = useState([1, 2, 3, 4, 5, 6, 7]);
 
   // Changing facility
   const handleFacilityChange = (e) => {
@@ -57,6 +57,7 @@ const Dashboard = () => {
     }
   };
 
+  // Changing day group
   const handleDayGroupChange = (e) => {
     const value = e.target.value;
 
@@ -76,11 +77,11 @@ const Dashboard = () => {
     }
   };
 
-  // Fetch filtered data
+  // Fetch data when filters change
   useEffect(() => {
     const [dateRange] = selectedDates;
     const startDate = dateRange.startDate;
-    const endDate = addDays(dateRange.endDate, 1);
+    const endDate = addDays(dateRange.endDate, 1); // endDate is 00:00 of end date
 
     const url = `${
       window.location.hostname === "localhost"

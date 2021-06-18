@@ -24,7 +24,7 @@ const Chart = ({ setTime, data }) => {
     setTime(20, 0),
     setTime(21, 0),
   ];
-
+  console.log(data);
   return (
     <VictoryChart
       theme={VictoryTheme.material}
