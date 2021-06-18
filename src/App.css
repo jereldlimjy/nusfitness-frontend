@@ -399,19 +399,19 @@ button {
   font: inherit;
 }
 
-input[type="checkbox"] {
+.slot {
   display: none;
 }
 
-input[type="checkbox"][disabled] ~ label {
+.slot[disabled] ~ label {
   color: rgb(170, 170, 170);
 }
 
-input[type="checkbox"][booked="true"] ~ label {
+.slot[booked="true"] ~ label {
   background-color: forestgreen;
 }
 
-label {
+.slot-label {
   display: inline-block;
   box-sizing: border-box;
   margin: 0;
@@ -420,8 +420,8 @@ label {
   cursor: pointer;
 }
 
-input[type="checkbox"][booked="true"]:checked ~ label,
-input:checked ~ label {
+.slot[booked="true"]:checked ~ label,
+.slot:checked ~ label {
   background-color: #ef7c00;
 }
 

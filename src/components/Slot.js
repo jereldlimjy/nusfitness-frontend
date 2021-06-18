@@ -37,6 +37,7 @@ const Slot = ({ facility, date, hour, handleChange, checked, booked }) => {
     <div className="border-box">
       <input
         type="checkbox"
+        className="slot"
         id={hour + date}
         date={date}
         hour={hour}
@@ -45,8 +46,13 @@ const Slot = ({ facility, date, hour, handleChange, checked, booked }) => {
         disabled={slotsLeft <= 0 || slotTime <= currentTime}
         booked={booked.toString()}
       />
-      <label htmlFor={hour + date}>{hour}</label>
-      <label htmlFor={hour + date}>{`${slotsLeft} Left`}</label>
+      <label className="slot-label" htmlFor={hour + date}>
+        {hour}
+      </label>
+      <label
+        className="slot-label"
+        htmlFor={hour + date}
+      >{`${slotsLeft} Left`}</label>
     </div>
   );
 };
