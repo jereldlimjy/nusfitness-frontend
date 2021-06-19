@@ -29,6 +29,19 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = ({ loggedIn, setLoggedIn }) => {
   const classes = useStyles();
 
+  const handleLogout = (e) => {
+    e.preventDefault();
+    const url = `${
+      window.location.hostname === "localhost"
+        ? "http://localhost:5000/"
+        : "https://salty-reaches-24995.herokuapp.com/"
+    }logout`;
+    fetch(url, {
+      credentials: "include",
+    }).catch((err) => console.log(err));
+
+    setLoggedIn(false);
+  };
   return (
     <nav className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
@@ -40,11 +53,7 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
           </Typography>
           {loggedIn ? (
             <Button>
-              <Link
-                to="/"
-                onClick={() => setLoggedIn(false)}
-                className={classes.link}
-              >
+              <Link to="/" onClick={handleLogout} className={classes.link}>
                 Logout
               </Link>
             </Button>

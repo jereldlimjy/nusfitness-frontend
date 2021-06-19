@@ -1,5 +1,6 @@
 import React from "react";
 import Booking from "./Booking";
+import Dashboard from "./Dashboard";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -14,13 +15,7 @@ const Home = ({ handleAlert, loggedIn, setLoggedIn }) => {
 
   return (
     <div className={classes.root}>
-      {loggedIn ? (
-        <Booking handleAlert={handleAlert} />
-      ) : (
-        <Typography variant="h4" align="center">
-          Welcome to NUSFitness! :)
-        </Typography>
-      )}
+      {loggedIn ? <Booking handleAlert={handleAlert} /> : <Dashboard />}
     </div>
   );
 };
