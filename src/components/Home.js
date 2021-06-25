@@ -1,8 +1,7 @@
+import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
 import Booking from "./Booking";
 import Dashboard from "./Dashboard";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {

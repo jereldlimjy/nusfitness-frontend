@@ -1,6 +1,39 @@
-import { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { useEffect, useState } from "react";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    border: "1px solid #EF7C00",
+    borderRadius: 5,
+    margin: theme.spacing(0.5)
+  },
+  slot: {
+    display: "none",
+    "&[disabled] ~ label": {
+      color: "rgb(170, 170, 170)"
+    },
+    "&[booked='true'] ~ label": {
+      backgroundColor: '#06c258',
+    },
+    "&[booked='true']:checked ~ label": {
+      backgroundColor: "#ef7c00"
+    },
+    "&:checked ~ label": {
+      backgroundColor: "#ef7c00"
+    }
+  },
+  slotLabel: {
+    display: "inline-block",
+    boxSizing: "border-box",
+    margin: 0,
+    padding: "5px 20px",
+    width: "100%",
+    cursor: "pointer"
+  }
+}));
 
 const Slot = ({ facility, date, hour, handleChange, checked, booked }) => {
+  const classes = useStyles();
   const [slotsLeft, setSlotsLeft] = useState(0);
   const slotsCap = 20; // TODO: different across facilities
 
@@ -34,10 +67,10 @@ const Slot = ({ facility, date, hour, handleChange, checked, booked }) => {
   const currentTime = new Date().getTime();
 
   return (
-    <div className="border-box">
+    <div className={classes.root}>
       <input
         type="checkbox"
-        className="slot"
+        className={classes.slot}
         id={hour + date}
         date={date}
         hour={hour}
@@ -46,11 +79,11 @@ const Slot = ({ facility, date, hour, handleChange, checked, booked }) => {
         disabled={slotsLeft <= 0 || slotTime <= currentTime}
         booked={booked.toString()}
       />
-      <label className="slot-label" htmlFor={hour + date}>
-        {hour}
+      <label className={classes.slotLabel} htmlFor={hour + date}>
+        <strong>{hour}</strong>
       </label>
       <label
-        className="slot-label"
+        className={classes.slotLabel}
         htmlFor={hour + date}
       >{`${slotsLeft} Left`}</label>
     </div>

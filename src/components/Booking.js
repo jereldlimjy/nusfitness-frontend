@@ -1,7 +1,36 @@
-import { useState, useEffect, useCallback } from "react";
+import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { useCallback, useEffect, useState } from "react";
 import SlotContainer from "./SlotContainer";
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2)
+  },
+  box: {
+    display: "flex",
+    justifyContent: "center"
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    width: "50%"
+  },
+  button: {
+    padding: theme.spacing(0.5, 2),
+    cursor: "pointer",
+    border: 0,
+    borderRadius: 5,
+    backgroundColor: "#1E88E5",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "rgba(30, 136, 229, 0.9)"
+    }
+  }
+}));
+
 const Booking = ({ handleAlert }) => {
+  const classes = useStyles();
+
   // Weekday and weekend slots for all facilities
   const facilities = [
     {
@@ -337,21 +366,33 @@ const Booking = ({ handleAlert }) => {
   }
 
   return (
-    <div>
-      <label htmlFor="facility">Select facility:</label>
-      <select name="facility" id="facility" onChange={handleFacilityChange}>
-        <option value={0}>{facilities[0].name}</option>
-        <option value={1}>{facilities[1].name}</option>
-        <option value={2}>{facilities[2].name}</option>
-        <option value={3}>{facilities[3].name}</option>
-        <option value={4}>{facilities[4].name}</option>
-        <option value={5}>{facilities[5].name}</option>
-      </select>
+    <div className={classes.root}>
+      <Typography variant="h4" align="center">Book a Facility</Typography>
+      <Box className={classes.box}>
+        <FormControl variant="outlined" className={classes.formControl}>
+          <InputLabel id="facility-label">Select Facility</InputLabel>
+          <Select
+            labelId="facility-label"
+            id="facility"
+            onChange={handleFacilityChange}
+            label="Select Facility"
+          >
+            <MenuItem value={0}>{facilities[0].name}</MenuItem>
+            <MenuItem value={1}>{facilities[1].name}</MenuItem>
+            <MenuItem value={2}>{facilities[2].name}</MenuItem>
+            <MenuItem value={3}>{facilities[3].name}</MenuItem>
+            <MenuItem value={4}>{facilities[4].name}</MenuItem>
+            <MenuItem value={5}>{facilities[5].name}</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      <form onSubmit={handleSubmit} className="container-vert">
+      <form onSubmit={handleSubmit}>
         {slotContainers}
         {Object.keys(selectedSlot).length !== 0 && (
-          <input type="submit" value={submitValue} />
+          <Box display="flex" justifyContent="center">
+            <input type="submit" value={submitValue} className={classes.button}/>
+          </Box>
         )}
       </form>
     </div>

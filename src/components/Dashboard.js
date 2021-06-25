@@ -1,11 +1,24 @@
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { addDays } from "date-fns";
+import React, { useEffect, useState } from "react";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css fileimport { useEffect, useState } from "react";
-import React, { useState, useEffect } from "react";
-import { addDays } from "date-fns";
 import Calendar from "./Calendar";
 import Chart from "./Chart";
 
+const useStyles = makeStyles((theme) => ({
+  root: {},
+  formControl: {
+    margin: theme.spacing(1),
+    width: 600
+  },
+}));
+
+
 const Dashboard = () => {
+  const classes = useStyles();
+
   const facilities = [
     "Kent Ridge Swimming Pool",
     "University Town Swimming Pool",
@@ -111,20 +124,24 @@ const Dashboard = () => {
   }, [facility, selectedDates, dayOfWeek]);
 
   return (
-    <div className="container">
-      <label htmlFor="facility">Select facility:</label>
-      <select
-        name="facility"
-        id="facility"
-        selected={facility}
-        onChange={handleFacilityChange}
-      >
-        {facilities.map((e) => (
-          <option key={e} value={e}>
-            {e}
-          </option>
-        ))}
-      </select>
+    <Box display="flex" flexDirection="column" alignItems="center">
+      <Box>
+        <FormControl variant="outlined" className={classes.formControl}>
+          <InputLabel id="facility-label">Select Facility</InputLabel>
+          <Select
+            labelId="facility-label"
+            id="facility"
+            onChange={handleFacilityChange}
+            label="Select Facility"
+          >
+            {facilities.map((e) => (
+              <MenuItem key={e} value={e}>
+                {e}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
 
       <div>
         <div>
@@ -174,7 +191,7 @@ const Dashboard = () => {
       />
 
       <Chart setTime={setTime} data={data} />
-    </div>
+    </Box>
   );
 };
 export default Dashboard;
