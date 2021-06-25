@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     border: "1px solid #EF7C00",
     borderRadius: 5,
-    margin: theme.spacing(0.5)
+    margin: theme.spacing(0.5),
   },
   slot: {
     display: "none",
