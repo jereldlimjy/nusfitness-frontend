@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import SlotContainer from "./SlotContainer";
+import Timetable from "./Timetable";
 
 const Booking = ({ handleAlert }) => {
   // Weekday and weekend slots for all facilities
@@ -338,6 +339,8 @@ const Booking = ({ handleAlert }) => {
 
   return (
     <div>
+      <Timetable />
+
       <label htmlFor="facility">Select facility:</label>
       <select name="facility" id="facility" onChange={handleFacilityChange}>
         <option value={0}>{facilities[0].name}</option>
