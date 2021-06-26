@@ -24,7 +24,7 @@ const Dashboard = () => {
     "Saturday",
   ];
 
-  // To simulate time data
+  // Set time of current date
   const setTime = (h, m) => {
     const date = new Date();
     date.setHours(h, m, 0, 0);
