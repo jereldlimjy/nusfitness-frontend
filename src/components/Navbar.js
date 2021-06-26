@@ -52,11 +52,18 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
             </Link>
           </Typography>
           {loggedIn ? (
-            <Button>
-              <Link to="/" onClick={handleLogout} className={classes.link}>
-                Logout
-              </Link>
-            </Button>
+            <Fragment>
+              <Button>
+                <Link to="/bookings" className={classes.link}>
+                  Bookings
+                </Link>
+              </Button>
+              <Button>
+                <Link to="/" onClick={handleLogout} className={classes.link}>
+                  Logout
+                </Link>
+              </Button>
+            </Fragment>
           ) : (
             <Fragment>
               <Button>

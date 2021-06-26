@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     width: "50%"
   },
   button: {
-    padding: theme.spacing(0.5, 2),
+    padding: theme.spacing(1.5, 2),
     cursor: "pointer",
     border: 0,
     borderRadius: 5,

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 const useStyles = makeStyles((theme) => ({
   root: {
     border: "1px solid #EF7C00",
-    borderRadius: 5,
     margin: theme.spacing(0.5),
   },
   slot: {
@@ -13,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
       color: "rgb(170, 170, 170)"
     },
     "&[booked='true'] ~ label": {
-      backgroundColor: '#06c258',
+      backgroundColor: 'forestgreen',
     },
     "&[booked='true']:checked ~ label": {
       backgroundColor: "#ef7c00"

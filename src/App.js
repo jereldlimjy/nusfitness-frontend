@@ -1,12 +1,13 @@
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import React, { useEffect, useState } from "react";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
-import React, { useState, useEffect } from "react";
-import Navbar from "./components/Navbar";
 import Alert from "./components/Alert";
+import Bookings from "./components/Bookings";
 import Home from "./components/Home";
-import Register from "./components/Register";
 import Login from "./components/Login";
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import Navbar from "./components/Navbar";
+import Register from "./components/Register";
 
 const theme = createMuiTheme({
   palette: {},
@@ -94,6 +95,12 @@ const App = () => {
                 handleAlert={handleAlert}
                 loggedIn={loggedIn}
                 setLoggedIn={setLoggedIn}
+              />
+            </Route>
+            <Route exact path="/bookings">
+              <Bookings
+                handleAlert={handleAlert}
+                loggedIn={loggedIn}
               />
             </Route>
           </Switch>
