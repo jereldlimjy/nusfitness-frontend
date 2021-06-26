@@ -1,6 +1,7 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import Dashboard from './Dashboard';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Booking = ({ handleAlert }) => {
+const Booking = ({ handleAlert, loggedIn }) => {
   const classes = useStyles();
   const [slots, setSlots] = useState([]);
   
@@ -35,29 +36,34 @@ const Booking = ({ handleAlert }) => {
 
   return (
     <div className={classes.root}>
-        <Typography variant="h4" align="center">View Bookings</Typography>
-        <TableContainer component={Paper}>
-            <Table className={classes.table}>
-                <TableHead>
-                <TableRow>
-                    <TableCell>Facility</TableCell>
-                    <TableCell align="right">Date</TableCell>
-                    <TableCell align="right">Time</TableCell>
-                </TableRow>
-                </TableHead>
-                <TableBody>
-                {slots.map((slot) => (
-                    <TableRow key={slot.facility}>
-                    <TableCell component="th" scope="row">
-                        {slot.facility}
-                    </TableCell>
-                    <TableCell align="right">{slot.date}</TableCell>
-                    <TableCell align="right">{slot.hour}</TableCell>
+      {!loggedIn 
+        ? <Dashboard />
+        : <Fragment>
+            <Typography variant="h4" align="center">View Bookings</Typography>
+            <TableContainer component={Paper}>
+                <Table className={classes.table}>
+                    <TableHead>
+                    <TableRow>
+                        <TableCell>Facility</TableCell>
+                        <TableCell align="right">Date</TableCell>
+                        <TableCell align="right">Time</TableCell>
                     </TableRow>
-                ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                    {slots.map((slot) => (
+                        <TableRow key={slot.facility}>
+                        <TableCell component="th" scope="row">
+                            {slot.facility}
+                        </TableCell>
+                        <TableCell align="right">{slot.date}</TableCell>
+                        <TableCell align="right">{slot.hour}</TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+          </Fragment>
+      }
     </div>
   );
 };

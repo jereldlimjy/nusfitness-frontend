@@ -76,11 +76,10 @@ const App = () => {
           <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
           <Alert alert={alert} />
           <Switch>
-            <Route exact path="/">
-              <Home
+            <Route exact path="/bookings">
+              <Bookings
                 handleAlert={handleAlert}
                 loggedIn={loggedIn}
-                setLoggedIn={setLoggedIn}
               />
             </Route>
             <Route exact path="/register">
@@ -97,10 +96,11 @@ const App = () => {
                 setLoggedIn={setLoggedIn}
               />
             </Route>
-            <Route exact path="/bookings">
-              <Bookings
+            <Route exact path="/">
+              <Home
                 handleAlert={handleAlert}
                 loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
               />
             </Route>
           </Switch>
