@@ -20,7 +20,8 @@ const useStyles = makeStyles((theme) => ({
   },
   selectButton: {
     marginRight: theme.spacing(0.5),
-    padding: theme.spacing(0.5, 1)
+    padding: theme.spacing(0.5, 1),
+    cursor: "pointer",
   }
 }));
 
