@@ -1,4 +1,18 @@
-import { Box, Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { addDays } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -11,20 +25,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
     "& .MuiCheckbox-colorPrimary.Mui-checked": {
-      color: "rgb(61, 145, 255)"
+      color: "rgb(61, 145, 255)",
     },
   },
   formControl: {
-    margin: theme.spacing(1),
-    width: 600
+    marginTop: theme.spacing(1),
+    width: "100%",
   },
-  selectButton: {
-    marginRight: theme.spacing(0.5),
-    padding: theme.spacing(0.5, 1),
-    cursor: "pointer",
-  }
+  selectButton: {},
 }));
-
 
 const Dashboard = () => {
   const classes = useStyles();
@@ -46,6 +55,7 @@ const Dashboard = () => {
     "Friday",
     "Saturday",
   ];
+  const dayGroup = ["SELECT ALL", "REMOVE ALL", "WEEKDAYS", "WEEKENDS"];
 
   // To simulate time data
   const setTime = (h, m) => {
@@ -82,19 +92,19 @@ const Dashboard = () => {
 
   // Changing day group
   const handleDayGroupChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.innerText;
 
     switch (value) {
-      case "Select All":
+      case "SELECT ALL":
         setDayOfWeek([1, 2, 3, 4, 5, 6, 7]);
         break;
-      case "Remove All":
+      case "REMOVE ALL":
         setDayOfWeek([]);
         break;
-      case "Weekdays Only":
+      case "WEEKDAYS":
         setDayOfWeek([2, 3, 4, 5, 6]);
         break;
-      case "Weekends Only":
+      case "WEEKENDS":
         setDayOfWeek([1, 7]);
         break;
     }
@@ -134,57 +144,49 @@ const Dashboard = () => {
   }, [facility, selectedDates, dayOfWeek]);
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" className={classes.root}>
-      <Typography variant="h4">Dashboard</Typography>
-      <Box mb={2}>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel id="facility-label">Select Facility</InputLabel>
-          <Select
-            labelId="facility-label"
-            id="facility"
-            onChange={handleFacilityChange}
-            label="Select Facility"
-          >
-            {facilities.map((e) => (
-              <MenuItem key={e} value={e}>
-                {e}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+    <Box display="flex">
+      <Box flex="1 0 0">
+        <Chart setTime={setTime} data={data} />
       </Box>
+      <Box
+        display="flex"
+        flex="0 0 25%"
+        flexDirection="column"
+        maxWidth="370px"
+        className={classes.root}
+      >
+        <Typography variant="h4">Filters</Typography>
+        <Box width="100%" mt={2} mb={2}>
+          <Typography variant="h6">Facility</Typography>
+          <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel id="facility-label">Select Facility</InputLabel>
+            <Select
+              labelId="facility-label"
+              id="facility"
+              onChange={handleFacilityChange}
+              label="Select Facility"
+            >
+              {facilities.map((e) => (
+                <MenuItem key={e} value={e}>
+                  {e}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
 
-      <Box align="center">
-        <Box>
-          <input
-            type="button"
-            value="Select All"
-            onClick={handleDayGroupChange}
-            className={classes.selectButton}
-          />
-          <input
-            type="button"
-            value="Remove All"
-            onClick={handleDayGroupChange}
-            className={classes.selectButton}
-          />
-          <input
-            type="button"
-            value="Weekdays Only"
-            onClick={handleDayGroupChange}
-            className={classes.selectButton}
-          />
-          <input
-            type="button"
-            value="Weekends Only"
-            onClick={handleDayGroupChange}
-            className={classes.selectButton}
+        <Box mt={1}>
+          <Typography variant="h6">Date Range</Typography>
+          <Calendar
+            selectedDates={selectedDates}
+            setSelectedDates={setSelectedDates}
           />
         </Box>
 
-        <Box>
-          {days.map((e, i) => (
-            <React.Fragment key={e}>
+        <FormControl>
+          <Typography variant="h6">Days of week</Typography>
+          <FormGroup row={true}>
+            {days.map((e, i) => (
               <FormControlLabel
                 control={
                   <Checkbox
@@ -198,19 +200,25 @@ const Dashboard = () => {
                 }
                 label={e}
               />
-            </React.Fragment>
+            ))}
+          </FormGroup>
+        </FormControl>
+
+        <Grid container spacing={1} justify="flex-start">
+          {dayGroup.map((e) => (
+            <Grid item xs={6}>
+              <Button
+                variant="contained"
+                fullWidth={true}
+                onClick={handleDayGroupChange}
+                className={classes.selectButton}
+              >
+                {e}
+              </Button>
+            </Grid>
           ))}
-        </Box>
+        </Grid>
       </Box>
-
-      <Box mt={1}>
-        <Calendar
-          selectedDates={selectedDates}
-          setSelectedDates={setSelectedDates}
-        />
-      </Box>
-
-      <Chart setTime={setTime} data={data} />
     </Box>
   );
 };
