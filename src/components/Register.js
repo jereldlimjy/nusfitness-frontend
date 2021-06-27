@@ -42,6 +42,15 @@ const Register = ({ handleAlert, loggedIn, setLoggedIn }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    // Has to be an NUS email
+    if (!email.includes("u.nus.edu")) {
+      handleAlert("Please enter a valid NUS email", "error");
+      setEmail("");
+      setPassword("");
+      return;
+    }
+
     const url = `${
       window.location.hostname === "localhost"
         ? "http://localhost:5000/"
