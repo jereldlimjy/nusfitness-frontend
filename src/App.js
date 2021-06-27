@@ -4,6 +4,7 @@ import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import Alert from "./components/Alert";
 import Bookings from "./components/Bookings";
+import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
@@ -76,11 +77,11 @@ const App = () => {
           <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
           <Alert alert={alert} />
           <Switch>
+            <Route exact path="/dashboard">
+              <Dashboard />
+            </Route>
             <Route exact path="/bookings">
-              <Bookings
-                handleAlert={handleAlert}
-                loggedIn={loggedIn}
-              />
+              <Bookings handleAlert={handleAlert} loggedIn={loggedIn} />
             </Route>
             <Route exact path="/register">
               <Register

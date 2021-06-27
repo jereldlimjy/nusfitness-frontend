@@ -145,12 +145,12 @@ const Dashboard = () => {
 
   return (
     <Box display="flex">
-      <Box flex="1 0 0">
+      <Box flex="3 0 0">
         <Chart setTime={setTime} data={data} />
       </Box>
       <Box
         display="flex"
-        flex="0 0 25%"
+        flex="1 1 0"
         flexDirection="column"
         maxWidth="370px"
         className={classes.root}
