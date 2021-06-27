@@ -1,5 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { useEffect, useState } from "react";
+import { addHours } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -9,17 +10,17 @@ const useStyles = makeStyles((theme) => ({
   slot: {
     display: "none",
     "&[disabled] ~ label": {
-      color: "rgb(170, 170, 170)"
+      color: "rgb(170, 170, 170)",
     },
     "&[booked='true'] ~ label": {
-      backgroundColor: 'forestgreen',
+      backgroundColor: "forestgreen",
     },
     "&[booked='true']:checked ~ label": {
-      backgroundColor: "#ef7c00"
+      backgroundColor: "#ef7c00",
     },
     "&:checked ~ label": {
-      backgroundColor: "#ef7c00"
-    }
+      backgroundColor: "#ef7c00",
+    },
   },
   slotLabel: {
     display: "inline-block",
@@ -27,13 +28,13 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
     padding: "5px 20px",
     width: "100%",
-    cursor: "pointer"
-  }
+    cursor: "pointer",
+  },
 }));
 
-const Slot = ({ facility, date, hour, handleChange, checked, booked }) => {
+const Slot = ({ facility, date, handleChange, checked, booked }) => {
   const classes = useStyles();
-  const [slotsLeft, setSlotsLeft] = useState(0);
+  const [slotsLeft, setSlotsLeft] = useState(20);
   const slotsCap = 20; // TODO: different across facilities
 
   useEffect(() => {
@@ -50,7 +51,6 @@ const Slot = ({ facility, date, hour, handleChange, checked, booked }) => {
         body: JSON.stringify({
           facility,
           date,
-          hour,
         }),
         credentials: "include",
       });
@@ -61,8 +61,14 @@ const Slot = ({ facility, date, hour, handleChange, checked, booked }) => {
   });
 
   // Disable current day slots whose time has elapsed
-  const hourInt = parseInt(hour.slice(0, 2));
-  const slotTime = new Date(date).setHours(hourInt + 1); // + 1 since the slot can still be booked in the 1h gap
+  const slotTime = addHours(date, 1); // + 1 since the slot can still be booked in the 1h gap
+  const hour = date
+    .toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    })
+    .replace(":", "");
   const currentTime = new Date().getTime();
 
   return (
@@ -70,20 +76,19 @@ const Slot = ({ facility, date, hour, handleChange, checked, booked }) => {
       <input
         type="checkbox"
         className={classes.slot}
-        id={hour + date}
+        id={date}
         date={date}
-        hour={hour}
         onChange={handleChange}
         checked={checked}
         disabled={slotsLeft <= 0 || slotTime <= currentTime}
         booked={booked.toString()}
       />
-      <label className={classes.slotLabel} htmlFor={hour + date}>
+      <label className={classes.slotLabel} htmlFor={date}>
         <strong>{hour}</strong>
       </label>
       <label
         className={classes.slotLabel}
-        htmlFor={hour + date}
+        htmlFor={date}
       >{`${slotsLeft} Left`}</label>
     </div>
   );

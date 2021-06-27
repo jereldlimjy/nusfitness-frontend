@@ -9,13 +9,13 @@ const useStyles = makeStyles((theme) => ({
   box: {
     display: "flex",
     flexDirection: "row",
-    flexWrap: "wrap"
-  }
+    flexWrap: "wrap",
+  },
 }));
 
 const SlotContainer = ({
   facility,
-  date,
+  assignedDate,
   hours,
   handleChange,
   selectedSlot,
@@ -25,23 +25,32 @@ const SlotContainer = ({
 
   return (
     <div className={classes.root}>
-      <Typography variant="h5">{date}</Typography>
+      <Typography variant="h5">{assignedDate.toDateString()}</Typography>
       <Box className={classes.box}>
-        {hours.map((hour) => (
-          <Slot
-            key={hour + date}
-            facility={facility}
-            date={date}
-            hour={hour}
-            handleChange={handleChange}
-            checked={selectedSlot.date === date && selectedSlot.hour === hour}
-            booked={
-              bookedSlots.filter(
-                (slot) => slot.date === date && slot.hour === hour
-              ).length > 0
-            }
-          />
-        ))}
+        {hours.map((hourString) => {
+          const hour = parseInt(hourString.slice(0, 2));
+          const minute = parseInt(hourString.slice(2, 4));
+          const date = new Date(assignedDate);
+          date.setHours(hour, minute, 0, 0);
+
+          return (
+            <Slot
+              key={date.toLocaleString()}
+              facility={facility}
+              date={date}
+              handleChange={handleChange}
+              checked={
+                selectedSlot.date &&
+                selectedSlot.date.getTime() === date.getTime()
+              }
+              booked={
+                bookedSlots.filter(
+                  (slot) => slot.date.getTime() === date.getTime()
+                ).length > 0
+              }
+            />
+          );
+        })}
       </Box>
     </div>
   );

@@ -57,7 +57,7 @@ const Dashboard = () => {
   ];
   const dayGroup = ["SELECT ALL", "REMOVE ALL", "WEEKDAYS", "WEEKENDS"];
 
-  // To simulate time data
+  // Set hour and minute of today
   const setTime = (h, m) => {
     const date = new Date();
     date.setHours(h, m, 0, 0);

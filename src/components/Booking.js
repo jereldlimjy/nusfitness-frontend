@@ -15,6 +15,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { useCallback, useEffect, useState } from "react";
 import SlotContainer from "./SlotContainer";
+import { addDays } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -217,14 +218,8 @@ const Booking = ({ handleAlert }) => {
   const [open, setOpen] = useState(false);
 
   // Date object
-  const date = new Date();
-  const day = date.getDay();
-  Date.prototype.addDays = (days) => {
-    /*eslint no-extend-native: ["error", { "exceptions": ["Date"] }]*/
-    const date = new Date();
-    date.setDate(date.getDate() + days);
-    return date;
-  };
+  const now = new Date();
+  const day = now.getDay();
 
   // Changing facility
   const handleFacilityChange = (e) => {
@@ -235,11 +230,9 @@ const Booking = ({ handleAlert }) => {
   // Changing a slot
   const handleSlotChange = (e) => {
     const checkbox = e.target;
-
     if (checkbox.checked) {
       setSelectedSlot({
-        date: checkbox.attributes.date.value,
-        hour: checkbox.attributes.hour.value,
+        date: new Date(checkbox.attributes.date.value),
       });
     } else {
       setSelectedSlot({});
@@ -247,13 +240,11 @@ const Booking = ({ handleAlert }) => {
 
     // Update submit value
     const selectedSlot = {
-      date: checkbox.attributes.date.value,
-      hour: checkbox.attributes.hour.value,
+      date: new Date(checkbox.attributes.date.value),
     };
     Object.keys(selectedSlot).length !== 0 &&
       (bookedSlots.find(
-        (slot) =>
-          slot.date === selectedSlot.date && slot.hour === selectedSlot.hour
+        (slot) => slot.date.getTime() === selectedSlot.date.getTime()
       )
         ? setSubmitValue("Cancel")
         : setSubmitValue("Book"));
@@ -356,21 +347,25 @@ const Booking = ({ handleAlert }) => {
       credentials: "include",
     })
       .then((res) => res.json())
-      .then((res) => setBookedSlots(res))
+      .then((res) =>
+        setBookedSlots(
+          res.map((e) => ({ facility: e.facility, date: new Date(e.date) }))
+        )
+      )
       .catch((err) => console.log(err));
   }, [handleSubmit, facility.name]);
 
   // Handle dialog actions
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  console.log(selectedSlot);
+
   const slotContainers = [];
   for (let i = 0; i < 3; i++) {
     slotContainers[i] = (
       <SlotContainer
-        key={date.addDays(i).toDateString()}
+        key={addDays(now, i).toLocaleDateString()}
         facility={facility.name}
-        date={date.addDays(i).toDateString()}
+        assignedDate={addDays(now, i)}
         hours={
           (day + i) % 7 === 0 || (day + i) % 7 === 6
             ? facility.weekendHours
@@ -428,8 +423,19 @@ const Booking = ({ handleAlert }) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>{`Facility: ${facility.name}`}</DialogContentText>
-          <DialogContentText>{`Date: ${selectedSlot.date}`}</DialogContentText>
-          <DialogContentText>{`Hour: ${selectedSlot.hour}`}</DialogContentText>
+          <DialogContentText>{`Date: ${
+            selectedSlot.date && selectedSlot.date.toDateString()
+          }`}</DialogContentText>
+          <DialogContentText>{`Hour: ${
+            selectedSlot.date &&
+            selectedSlot.date
+              .toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })
+              .replace(":", "")
+          }`}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
