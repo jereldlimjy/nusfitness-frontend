@@ -1,19 +1,32 @@
-import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useCallback, useEffect, useState } from "react";
 import SlotContainer from "./SlotContainer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   box: {
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   formControl: {
     margin: theme.spacing(1),
-    width: "50%"
+    width: "50%",
   },
   button: {
     padding: theme.spacing(1.5, 2),
@@ -23,9 +36,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#1E88E5",
     color: "white",
     "&:hover": {
-      backgroundColor: "rgba(30, 136, 229, 0.9)"
-    }
-  }
+      backgroundColor: "rgba(30, 136, 229, 0.9)",
+    },
+  },
 }));
 
 const Booking = ({ handleAlert }) => {
@@ -201,6 +214,7 @@ const Booking = ({ handleAlert }) => {
   const [selectedSlot, setSelectedSlot] = useState({});
   const [bookedSlots, setBookedSlots] = useState([]);
   const [submitValue, setSubmitValue] = useState("Book");
+  const [open, setOpen] = useState(false);
 
   // Date object
   const date = new Date();
@@ -346,6 +360,10 @@ const Booking = ({ handleAlert }) => {
       .catch((err) => console.log(err));
   }, [handleSubmit, facility.name]);
 
+  // Handle dialog actions
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  console.log(selectedSlot);
   const slotContainers = [];
   for (let i = 0; i < 3; i++) {
     slotContainers[i] = (
@@ -367,7 +385,9 @@ const Booking = ({ handleAlert }) => {
 
   return (
     <div className={classes.root}>
-      <Typography variant="h4" align="center">Book a Facility</Typography>
+      <Typography variant="h4" align="center">
+        Book a Facility
+      </Typography>
       <Box className={classes.box}>
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="facility-label">Select Facility</InputLabel>
@@ -387,14 +407,45 @@ const Booking = ({ handleAlert }) => {
         </FormControl>
       </Box>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleClickOpen}>
         {slotContainers}
         {Object.keys(selectedSlot).length !== 0 && (
           <Box display="flex" justifyContent="center">
-            <input type="submit" value={submitValue} className={classes.button}/>
+            <input
+              type="submit"
+              value={submitValue}
+              className={classes.button}
+            />
           </Box>
         )}
       </form>
+
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>
+          {submitValue === "Book"
+            ? "Book selected slot?"
+            : "Cancel selected slot?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>{`Facility: ${facility.name}`}</DialogContentText>
+          <DialogContentText>{`Date: ${selectedSlot.date}`}</DialogContentText>
+          <DialogContentText>{`Hour: ${selectedSlot.hour}`}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            No
+          </Button>
+          <Button
+            onClick={(e) => {
+              handleClose();
+              handleSubmit(e);
+            }}
+            color="primary"
+          >
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
