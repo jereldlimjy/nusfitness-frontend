@@ -40,7 +40,7 @@ const DAY_OF_WEEK = {
 // Deserialize timetable to an object, where keys are modules and values are objects of lessons
 const deserializeTimetable = () => {
   const url =
-    "http://localhost:8080/timetable/sem-1/share?CS2100=LAB:19,TUT:30,LEC:1&CS2101=&CS2103T=LEC:G09&ST2334=LEC:1";
+    "https://nusmods.com/timetable/sem-1/share?CS2100=LAB:13,TUT:16,LEC:1&CS2101=&CS2103T=LEC:G03&ST2334=LEC:1";
   const [serialized] = url.match(/\?\S*/);
   const params = qs.parse(serialized);
   return mapValues(params, parseModuleConfig);
@@ -120,7 +120,21 @@ const TimeTableCell = (props) => {
 };
 const TimeLabel = (props) => {
   const classes = useStyles();
-  return <WeekView.TimeScaleLabel {...props} className={classes.timeLabel} />;
+  return (
+    <WeekView.TimeScaleLabel
+      {...props}
+      formatDate={(date) =>
+        date
+          .toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          })
+          .replace(":", "")
+      }
+      className={classes.timeLabel}
+    />
+  );
 };
 const TickCell = (props) => {
   const classes = useStyles();
@@ -128,17 +142,6 @@ const TickCell = (props) => {
     <WeekView.TimeScaleTickCell {...props} className={classes.timeTableCell} />
   );
 };
-
-// const TimeScaleLayout = ({ height, ...restProps }) => {
-//   // console.log(height);
-//   console.log(restProps);
-//   return (
-//     <WeekView.TimeScaleLayout
-//       // {...restProps}
-//       height={2000}
-//     ></WeekView.TimeScaleLayout>
-//   );
-// };
 
 const Timetable = () => {
   const [appointments, setAppointments] = useState([]);
@@ -213,7 +216,6 @@ const Timetable = () => {
           timeTableCellComponent={TimeTableCell}
           timeScaleLabelComponent={TimeLabel}
           timeScaleTickCellComponent={TickCell}
-          // timeScaleLayoutComponent={TimeScaleLayout}
         />
         <Appointments appointmentContentComponent={AppointmentContent} />
       </Scheduler>
