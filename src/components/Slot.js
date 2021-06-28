@@ -58,7 +58,7 @@ const Slot = ({ facility, date, handleChange, checked, booked }) => {
       setSlotsLeft(slotsCap - slotsCount);
     };
     fetchSlotsCount();
-  }, []);
+  }, [checked]);
 
   // Disable current day slots whose time has elapsed
   const slotTime = addHours(date, 1); // + 1 since the slot can still be booked in the 1h gap
