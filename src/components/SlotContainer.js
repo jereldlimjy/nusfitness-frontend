@@ -35,7 +35,7 @@ const SlotContainer = ({
 
           return (
             <Slot
-              key={date.toLocaleString()}
+              key={date.toLocaleString() + facility}
               facility={facility}
               date={date}
               handleChange={handleChange}
