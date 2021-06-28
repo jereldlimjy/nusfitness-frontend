@@ -83,6 +83,19 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontWeight: "600",
   },
+  timeTableCell: {
+    height: "66px",
+  },
+  timeLabel: {
+    height: "66px",
+    lineHeight: "64px",
+    "&:first-child": {
+      height: "33px",
+    },
+    "&:last-child": {
+      height: "33px",
+    },
+  },
 }));
 
 // Format for appointment content
@@ -98,6 +111,34 @@ const AppointmentContent = ({ data, ...restProps }) => {
     </Appointments.AppointmentContent>
   );
 };
+
+const TimeTableCell = (props) => {
+  const classes = useStyles();
+  return (
+    <WeekView.TimeTableCell {...props} className={classes.timeTableCell} />
+  );
+};
+const TimeLabel = (props) => {
+  const classes = useStyles();
+  return <WeekView.TimeScaleLabel {...props} className={classes.timeLabel} />;
+};
+const TickCell = (props) => {
+  const classes = useStyles();
+  return (
+    <WeekView.TimeScaleTickCell {...props} className={classes.timeTableCell} />
+  );
+};
+
+// const TimeScaleLayout = ({ height, ...restProps }) => {
+//   // console.log(height);
+//   console.log(restProps);
+//   return (
+//     <WeekView.TimeScaleLayout
+//       // {...restProps}
+//       height={2000}
+//     ></WeekView.TimeScaleLayout>
+//   );
+// };
 
 const Timetable = () => {
   const [appointments, setAppointments] = useState([]);
@@ -165,7 +206,15 @@ const Timetable = () => {
   return (
     <Paper>
       <Scheduler data={appointments}>
-        <WeekView startDayHour={7} endDayHour={22} cellDuration={60} />
+        <WeekView
+          startDayHour={7}
+          endDayHour={22}
+          cellDuration={60}
+          timeTableCellComponent={TimeTableCell}
+          timeScaleLabelComponent={TimeLabel}
+          timeScaleTickCellComponent={TickCell}
+          // timeScaleLayoutComponent={TimeScaleLayout}
+        />
         <Appointments appointmentContentComponent={AppointmentContent} />
       </Scheduler>
     </Paper>
