@@ -1,30 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
+import Booking from "./Booking";
+import Dashboard from "./Dashboard";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 const Home = ({ handleAlert, loggedIn, setLoggedIn }) => {
-    // const [ loggedIn, setLoggedIn ] = useState(false);
+  const classes = useStyles();
 
-    // useEffect(() => {
-    //     fetch('http://localhost:3000/isLoggedIn')
-    //     .then(res => res.json())
-    //     .then(data => {
-    //         console.log(data);
-    //         setLoggedIn(data.authenticated);
-    //     })
-    //     .catch((err) => {
-    //         console.log(err);
-    //         setLoggedIn(false);
-    //     });
-    // }, []);
-
-    return (
-        <div>
-            {loggedIn ? (
-                <h1 className='text-center'>You are logged in!</h1>
-            ) : (
-                <h1 className='text-center'>Welcome to NUSFitness! :)</h1>
-            )}
-        </div>
-    )
-}
+  return (
+    <div className={classes.root}>
+      {loggedIn ? <Booking handleAlert={handleAlert} /> : <Dashboard />}
+    </div>
+  );
+};
 
 export default Home;

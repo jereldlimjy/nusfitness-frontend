@@ -1,11 +1,10 @@
 import React from 'react';
+import { Alert as MuiAlert } from '@material-ui/lab';
 
 const Alert = ({ alert }) => {
 	return (
 		alert !== null && (
-			<div className={`alert alert-${alert.type}`}>
-				<i className='fas fa-info-circle'></i> {alert.msg}
-			</div>
+			<MuiAlert severity={alert.type}>{alert.msg}</MuiAlert>
 		)
 	)
 }
