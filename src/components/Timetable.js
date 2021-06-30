@@ -2,6 +2,7 @@ import {
   Scheduler,
   WeekView,
   Appointments,
+  CurrentTimeIndicator,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { Box, Button, makeStyles, Paper, TextField } from "@material-ui/core";
 import qs from "query-string";
@@ -267,15 +268,17 @@ const Timetable = ({ handleAlert }) => {
         >
           {buttonText}
         </Button>
-        <TextField
-          error={linkError}
-          label={linkError ? "Error" : "NUSMods Share Link"}
-          helperText={linkError ? "Invalid Link" : ""}
-          value={timeTableLink}
-          variant="outlined"
-          onChange={handleLinkChange}
-          className={classes.inputFields}
-        />
+        {showTimeTable && (
+          <TextField
+            error={linkError}
+            label={linkError ? "Error" : "NUSMods Share Link"}
+            helperText={linkError ? "Invalid Link" : ""}
+            value={timeTableLink}
+            variant="outlined"
+            onChange={handleLinkChange}
+            className={classes.inputFields}
+          />
+        )}
       </Box>
 
       {showTimeTable && (
@@ -290,6 +293,7 @@ const Timetable = ({ handleAlert }) => {
               timeScaleTickCellComponent={TickCell}
             />
             <Appointments appointmentContentComponent={AppointmentContent} />
+            <CurrentTimeIndicator />
           </Scheduler>
         </Paper>
       )}
