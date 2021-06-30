@@ -4,11 +4,19 @@ import {
   Appointments,
   CurrentTimeIndicator,
 } from "@devexpress/dx-react-scheduler-material-ui";
-import { Box, Button, makeStyles, Paper, TextField } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  makeStyles,
+  Paper,
+  TextField,
+  Tooltip,
+} from "@material-ui/core";
 import qs from "query-string";
 import { castArray, invert, mapValues } from "lodash";
 import addDays from "date-fns/addDays";
 import { useEffect, useState } from "react";
+import nusmoderator from "nusmoderator";
 
 const LESSON_SEP = ",";
 const LESSON_TYPE_SEP = ":";
@@ -120,7 +128,7 @@ const TickCell = (props) => {
 
 const Timetable = ({ handleAlert }) => {
   const [showTimeTable, setShowTimeTable] = useState(false);
-  const [buttonText, setButtonText] = useState("Show Timetable");
+  const [showLessons, setShowLessons] = useState(true);
   const [timeTableLink, setTimeTableLink] = useState(
     "https://nusmods.com/timetable/sem-1/share?CS2040S=LAB:03,LEC:1,TUT:05&CS2100=LAB:13,TUT:16,LEC:1&CS2101=&CS2103T=LEC:G03&ST2334=LEC:1"
   );
@@ -202,7 +210,7 @@ const Timetable = ({ handleAlert }) => {
             );
 
             // Filter lessons for the module which matches the timetable
-            const filteredLessons = Object.keys(moduleLessons).flatMap(
+            let filteredLessons = Object.keys(moduleLessons).flatMap(
               (lessonType) =>
                 currentSemesterData.timetable.filter(
                   (lesson) =>
@@ -210,6 +218,18 @@ const Timetable = ({ handleAlert }) => {
                     lesson.lessonType === lessonType
                 )
             );
+
+            // If alwaysShowLessons is false, hide lessons which are not available for the current week
+            if (!showLessons) {
+              const acadWeekInfo =
+                nusmoderator.academicCalendar.getAcadWeekInfo(new Date());
+              const currentSem = acadWeekInfo.sem;
+              const currentWeek = acadWeekInfo.num;
+              filteredLessons = filteredLessons.filter(
+                (lesson) =>
+                  currentSem === semester && lesson.weeks.includes(currentWeek)
+              );
+            }
 
             // Create an array of appointments based on the module
             const lessons = filteredLessons.map((lesson) => {
@@ -249,11 +269,13 @@ const Timetable = ({ handleAlert }) => {
       return;
     }
     setTimetable(semester, deserializedTimetable);
-  }, [timeTableLink]);
+  }, [timeTableLink, showLessons]);
 
   const handleShowTimetableChange = (e) => {
-    setButtonText(showTimeTable ? "Show Timetable" : "Hide Timetable");
     setShowTimeTable(!showTimeTable);
+  };
+  const handleShowLessons = (e) => {
+    setShowLessons(!showLessons);
   };
   const handleLinkChange = (e) => setTimeTableLink(e.target.value);
 
@@ -266,8 +288,28 @@ const Timetable = ({ handleAlert }) => {
           color="primary"
           className={classes.inputFields}
         >
-          {buttonText}
+          {showTimeTable ? "Hide Timetable" : "Show Timetable"}
         </Button>
+
+        {showTimeTable && (
+          <Tooltip
+            title={
+              showLessons
+                ? "Only show lessons which occur during the current academic week"
+                : "Show lessons regardless of academic week"
+            }
+          >
+            <Button
+              onClick={handleShowLessons}
+              variant="contained"
+              color="secondary"
+              className={classes.inputFields}
+            >
+              {showLessons ? "Hide Lessons" : "Always Show Lessons"}
+            </Button>
+          </Tooltip>
+        )}
+
         {showTimeTable && (
           <TextField
             error={linkError}
