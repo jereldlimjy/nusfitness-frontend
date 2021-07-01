@@ -339,7 +339,7 @@ const Booking = ({ handleAlert }) => {
 
   return (
     <div>
-      <Timetable handleAlert={handleAlert} />
+      <Timetable handleAlert={handleAlert} bookedSlots={bookedSlots} />
 
       <label htmlFor="facility">Select facility:</label>
       <select name="facility" id="facility" onChange={handleFacilityChange}>
