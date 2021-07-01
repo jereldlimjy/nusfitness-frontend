@@ -236,6 +236,12 @@ const Timetable = ({ bookedSlots }) => {
             (semesterData) => semesterData.semester === semester
           );
 
+          // If the semester data cannot be found
+          if (!currentSemesterData) {
+            setLinkError(true);
+            return;
+          }
+
           // Filter lessons for the module which matches the timetable
           let filteredLessons = Object.keys(moduleLessons).flatMap(
             (lessonType) =>
@@ -253,7 +259,6 @@ const Timetable = ({ bookedSlots }) => {
             );
             const currentSem = SEMESTER_NUM[acadWeekInfo.sem];
             const currentWeek = acadWeekInfo.num;
-            console.log(currentSem);
             filteredLessons = filteredLessons.filter(
               (lesson) =>
                 currentSem === semester && lesson.weeks.includes(currentWeek)
