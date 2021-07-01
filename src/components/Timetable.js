@@ -7,8 +7,12 @@ import {
 import {
   Box,
   Button,
+  FormControl,
+  InputLabel,
   makeStyles,
+  MenuItem,
   Paper,
+  Select,
   TextField,
   Tooltip,
 } from "@material-ui/core";
@@ -77,6 +81,10 @@ const useStyles = makeStyles((theme) => ({
   inputFields: {
     marginRight: theme.spacing(2),
   },
+  select: {
+    minWidth: 200,
+    marginRight: theme.spacing(2),
+  },
 }));
 
 // Format for appointment content
@@ -129,6 +137,7 @@ const TickCell = (props) => {
 const Timetable = ({ handleAlert }) => {
   const [showTimeTable, setShowTimeTable] = useState(false);
   const [showLessons, setShowLessons] = useState(true);
+  const [firstDayOfWeek, SetFirstDayOfWeek] = useState(0);
   const [timeTableLink, setTimeTableLink] = useState(
     "https://nusmods.com/timetable/sem-1/share?CS2040S=LAB:03,LEC:1,TUT:05&CS2100=LAB:13,TUT:16,LEC:1&CS2101=&CS2103T=LEC:G03&ST2334=LEC:1"
   );
@@ -271,12 +280,13 @@ const Timetable = ({ handleAlert }) => {
     setTimetable(semester, deserializedTimetable);
   }, [timeTableLink, showLessons]);
 
-  const handleShowTimetableChange = (e) => {
+  const handleShowTimetableChange = () => {
     setShowTimeTable(!showTimeTable);
   };
-  const handleShowLessons = (e) => {
+  const handleShowLessons = () => {
     setShowLessons(!showLessons);
   };
+  const handleFirstDayOfWeekChange = (e) => SetFirstDayOfWeek(e.target.value);
   const handleLinkChange = (e) => setTimeTableLink(e.target.value);
 
   return (
@@ -312,6 +322,20 @@ const Timetable = ({ handleAlert }) => {
 
         {showTimeTable && (
           <TextField
+            select
+            label="First Day of Week"
+            variant="outlined"
+            className={classes.select}
+            onChange={handleFirstDayOfWeekChange}
+            value={firstDayOfWeek}
+          >
+            <MenuItem value={0}>Sunday</MenuItem>
+            <MenuItem value={1}>Monday</MenuItem>
+          </TextField>
+        )}
+
+        {showTimeTable && (
+          <TextField
             error={linkError}
             label={linkError ? "Error" : "NUSMods Share Link"}
             helperText={linkError ? "Invalid Link" : ""}
@@ -325,7 +349,7 @@ const Timetable = ({ handleAlert }) => {
 
       {showTimeTable && (
         <Paper>
-          <Scheduler data={appointments}>
+          <Scheduler firstDayOfWeek={firstDayOfWeek} data={appointments}>
             <WeekView
               startDayHour={7}
               endDayHour={22}
