@@ -55,7 +55,7 @@ const Dashboard = () => {
   ];
   const dayGroup = ["SELECT ALL", "REMOVE ALL", "WEEKDAYS", "WEEKENDS"];
 
-  // Set hour and minute of today
+  // Set time of current date
   const setTime = (h, m) => {
     const date = new Date();
     date.setHours(h, m, 0, 0);

@@ -16,6 +16,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useCallback, useEffect, useState } from "react";
 import SlotContainer from "./SlotContainer";
 import { addDays } from "date-fns";
+import Timetable from "./Timetable";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -380,6 +381,8 @@ const Booking = ({ handleAlert }) => {
 
   return (
     <div className={classes.root}>
+      <Timetable handleAlert={handleAlert} bookedSlots={bookedSlots} />
+
       <Typography variant="h4" align="center">
         Book a Facility
       </Typography>
