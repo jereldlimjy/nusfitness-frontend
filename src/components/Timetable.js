@@ -41,6 +41,12 @@ const LESSON_TYPE_ABBREV = {
   Workshop: "WS",
 };
 const LESSON_ABBREV_TYPE = invert(LESSON_TYPE_ABBREV);
+const SEMESTER_NUM = {
+  "Semester 1": 1,
+  "Semester 2": 2,
+  "Special Term I": 3,
+  "Special Term II": 4,
+};
 const DAY_OF_WEEK = {
   Sunday: 0,
   Monday: 1,
@@ -151,24 +157,25 @@ const Timetable = ({ bookedSlots }) => {
   const [showLessons, setShowLessons] = useState(true);
   const [firstDayOfWeek, SetFirstDayOfWeek] = useState(0);
   const [timeTableLink, setTimeTableLink] = useState(
-    "https://nusmods.com/timetable/sem-1/share?CS2040S=LAB:03,LEC:1,TUT:05&CS2100=LAB:13,TUT:16,LEC:1&CS2101=&CS2103T=LEC:G03&ST2334=LEC:1"
+    "https://nusmods.com/timetable/st-i/share?TBA2101=TUT:2,LEC:1"
   );
   const [linkError, setLinkError] = useState(false);
   const [appointments, setAppointments] = useState([]);
   const classes = useStyles();
 
   const retrieveSemester = () => {
-    const match = timeTableLink.match(/sem-\d/);
-    if (!match) {
+    const semMatch = timeTableLink.match(/sem-[1|2]/);
+    const specialMatch = timeTableLink.match(/st-i{2}\/|st-i\//);
+    if (!semMatch && !specialMatch) {
       setLinkError(true);
-    } else {
-      const semester = parseInt(match[0].slice(4, 5));
-      if (semester === 1 || semester === 2) {
-        setLinkError(false);
-        return semester;
-      } else {
-        setLinkError(true);
-      }
+    } else if (semMatch) {
+      setLinkError(false);
+      return parseInt(semMatch[0].slice(4, 5));
+    } else if (specialMatch) {
+      setLinkError(false);
+      const length = specialMatch[0].length;
+      // Special match is either "st-i/" or "st-ii/". They are semesters 3 and 4 respectively.
+      return length === 5 ? 3 : 4;
     }
   };
 
@@ -244,8 +251,9 @@ const Timetable = ({ bookedSlots }) => {
             const acadWeekInfo = nusmoderator.academicCalendar.getAcadWeekInfo(
               new Date()
             );
-            const currentSem = acadWeekInfo.sem;
+            const currentSem = SEMESTER_NUM[acadWeekInfo.sem];
             const currentWeek = acadWeekInfo.num;
+            console.log(currentSem);
             filteredLessons = filteredLessons.filter(
               (lesson) =>
                 currentSem === semester && lesson.weeks.includes(currentWeek)
@@ -326,7 +334,7 @@ const Timetable = ({ bookedSlots }) => {
   };
   const handleFirstDayOfWeekChange = (e) => SetFirstDayOfWeek(e.target.value);
   const handleLinkChange = (e) => setTimeTableLink(e.target.value);
-  console.log(appointments);
+
   return (
     <Box className={classes.root}>
       <Box className={classes.inputContainer}>
