@@ -215,6 +215,7 @@ const Booking = ({ handleAlert }) => {
   const [facility, setfacility] = useState(facilities[0]);
   const [selectedSlot, setSelectedSlot] = useState({});
   const [bookedSlots, setBookedSlots] = useState([]);
+  const [slotCount, setSlotCount] = useState([]);
   const [submitValue, setSubmitValue] = useState("Book");
   const [open, setOpen] = useState(false);
 
@@ -356,6 +357,32 @@ const Booking = ({ handleAlert }) => {
       .catch((err) => console.log(err));
   }, [handleSubmit, facility.name]);
 
+  // Retrieve slots left
+  useEffect(() => {
+    const url = `${
+      window.location.hostname === "localhost"
+        ? "http://localhost:5000/"
+        : "https://salty-reaches-24995.herokuapp.com/"
+    }slots`;
+    fetch(url, {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        facility: facility.name,
+        date: new Date(now.getFullYear(), now.getMonth(), now.getDate()),
+      }),
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((res) =>
+        setSlotCount(
+          res.map((e) => ({ date: new Date(e._id), count: e.count }))
+        )
+      )
+      .catch((err) => console.log(err));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [facility, selectedSlot]);
+
   // Handle dialog actions
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -375,6 +402,7 @@ const Booking = ({ handleAlert }) => {
         handleChange={handleSlotChange}
         selectedSlot={selectedSlot}
         bookedSlots={bookedSlots}
+        slotCount={slotCount}
       />
     );
   }

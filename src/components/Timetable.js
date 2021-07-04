@@ -7,12 +7,9 @@ import {
 import {
   Box,
   Button,
-  FormControl,
-  InputLabel,
   makeStyles,
   MenuItem,
   Paper,
-  Select,
   TextField,
   Tooltip,
 } from "@material-ui/core";
@@ -317,18 +314,22 @@ const Timetable = ({ bookedSlots }) => {
     return bookedSlots;
   };
 
-  useEffect(async () => {
-    const semester = retrieveSemester();
-    if (!semester) {
-      return;
-    }
-    const deserializedTimetable = deserializeTimetable();
-    if (!deserializedTimetable) {
-      return;
-    }
-    const lessons = await setTimetable(semester, deserializedTimetable);
-    const slots = await setBookedSlots();
-    setAppointments([...lessons, ...slots]);
+  useEffect(() => {
+    const updateTimetable = async () => {
+      const semester = retrieveSemester();
+      if (!semester) {
+        return;
+      }
+      const deserializedTimetable = deserializeTimetable();
+      if (!deserializedTimetable) {
+        return;
+      }
+      const lessons = await setTimetable(semester, deserializedTimetable);
+      const slots = await setBookedSlots();
+      setAppointments([...lessons, ...slots]);
+    };
+    updateTimetable();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeTableLink, showLessons, bookedSlots]);
 
   const handleShowTimetableChange = () => {

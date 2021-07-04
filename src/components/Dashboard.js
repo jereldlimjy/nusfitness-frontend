@@ -105,6 +105,8 @@ const Dashboard = () => {
       case "WEEKENDS":
         setDayOfWeek([1, 7]);
         break;
+      default:
+        break;
     }
   };
 
@@ -139,6 +141,7 @@ const Dashboard = () => {
           }))
         )
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facility, selectedDates, dayOfWeek]);
 
   return (

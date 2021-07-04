@@ -1,5 +1,4 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { useEffect, useState } from "react";
 import { addHours } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
@@ -32,33 +31,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Slot = ({ facility, date, handleChange, checked, booked }) => {
+const Slot = ({ date, handleChange, checked, booked, slotsLeft }) => {
   const classes = useStyles();
-  const [slotsLeft, setSlotsLeft] = useState(20);
-  const slotsCap = 20; // TODO: different across facilities
-
-  useEffect(() => {
-    const url = `${
-      window.location.hostname === "localhost"
-        ? "http://localhost:5000/"
-        : "https://salty-reaches-24995.herokuapp.com/"
-    }slots`;
-
-    const fetchSlotsCount = async () => {
-      const res = await fetch(url, {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          facility,
-          date,
-        }),
-        credentials: "include",
-      });
-      const slotsCount = await res.json();
-      setSlotsLeft(slotsCap - slotsCount);
-    };
-    fetchSlotsCount();
-  });
 
   // Disable current day slots whose time has elapsed
   const slotTime = addHours(date, 1); // + 1 since the slot can still be booked in the 1h gap
