@@ -53,8 +53,8 @@ const App = () => {
 
   useEffect(() => {
     const url = `${
-      window.location.hostname === "localhost"
-        ? "http://localhost:5000/"
+      window.location.hostname === "local.nusfitness.com"
+        ? "http://local.nusfitness.com:5000/"
         : "https://salty-reaches-24995.herokuapp.com/"
     }isLoggedIn`;
     fetch(url, {

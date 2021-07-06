@@ -117,8 +117,8 @@ const Dashboard = () => {
     const endDate = addDays(dateRange.endDate, 1); // endDate is 00:00 of end date
 
     const url = `${
-      window.location.hostname === "localhost"
-        ? "http://localhost:5000/"
+      window.location.hostname === "local.nusfitness.com"
+        ? "http://local.nusfitness.com:5000/"
         : "https://salty-reaches-24995.herokuapp.com/"
     }traffic`;
     fetch(url, {
@@ -131,6 +131,7 @@ const Dashboard = () => {
         date: { $gte: startDate, $lte: endDate },
         day: dayOfWeek,
       }),
+      credentials: "include",
     })
       .then((res) => res.json())
       .then((res) =>
