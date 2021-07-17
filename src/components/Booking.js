@@ -258,8 +258,8 @@ const Booking = ({ handleAlert }) => {
       e.preventDefault();
       if (submitValue === "Cancel") {
         const url = `${
-          window.location.hostname === "localhost"
-            ? "http://localhost:5000/"
+          window.location.hostname === "local.nusfitness.com"
+            ? "http://local.nusfitness.com:5000/"
             : "https://salty-reaches-24995.herokuapp.com/"
         }cancel`;
 
@@ -302,8 +302,8 @@ const Booking = ({ handleAlert }) => {
           });
       } else {
         const url = `${
-          window.location.hostname === "localhost"
-            ? "http://localhost:5000/"
+          window.location.hostname === "local.nusfitness.com"
+            ? "http://local.nusfitness.com:5000/"
             : "https://salty-reaches-24995.herokuapp.com/"
         }book`;
 
@@ -336,8 +336,8 @@ const Booking = ({ handleAlert }) => {
   // Retrieve booked slots
   useEffect(() => {
     const url = `${
-      window.location.hostname === "localhost"
-        ? "http://localhost:5000/"
+      window.location.hostname === "local.nusfitness.com"
+        ? "http://local.nusfitness.com:5000/"
         : "https://salty-reaches-24995.herokuapp.com/"
     }bookedSlots`;
     fetch(url, {
@@ -358,10 +358,11 @@ const Booking = ({ handleAlert }) => {
   }, [handleSubmit, facility.name]);
 
   // Retrieve slots left
+  const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   useEffect(() => {
     const url = `${
-      window.location.hostname === "localhost"
-        ? "http://localhost:5000/"
+      window.location.hostname === "local.nusfitness.com"
+        ? "http://local.nusfitness.com:5000/"
         : "https://salty-reaches-24995.herokuapp.com/"
     }slots`;
     fetch(url, {
@@ -369,7 +370,8 @@ const Booking = ({ handleAlert }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         facility: facility.name,
-        date: new Date(now.getFullYear(), now.getMonth(), now.getDate()),
+        startDate: todayDate,
+        endDate: addDays(todayDate, 3),
       }),
       credentials: "include",
     })

@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
 import Booking from "./Booking";
 import Dashboard from "./Dashboard";
+import TelegramLogin from "./TelegramLogin";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,7 +15,14 @@ const Home = ({ handleAlert, loggedIn, setLoggedIn }) => {
 
   return (
     <div className={classes.root}>
-      {loggedIn ? <Booking handleAlert={handleAlert} /> : <Dashboard />}
+      {loggedIn ? (
+        <>
+          <TelegramLogin />
+          <Booking handleAlert={handleAlert} />
+        </>
+      ) : (
+        <Dashboard />
+      )}
     </div>
   );
 };
