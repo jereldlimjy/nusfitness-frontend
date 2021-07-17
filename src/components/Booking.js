@@ -358,6 +358,7 @@ const Booking = ({ handleAlert }) => {
   }, [handleSubmit, facility.name]);
 
   // Retrieve slots left
+  const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   useEffect(() => {
     const url = `${
       window.location.hostname === "local.nusfitness.com"
@@ -369,7 +370,8 @@ const Booking = ({ handleAlert }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         facility: facility.name,
-        date: new Date(now.getFullYear(), now.getMonth(), now.getDate()),
+        startDate: todayDate,
+        endDate: addDays(todayDate, 3),
       }),
       credentials: "include",
     })
