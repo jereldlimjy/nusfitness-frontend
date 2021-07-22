@@ -52,5 +52,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://jereldlimjy.github.io/nusfitness"
+  "homepage": "https://jereldlimjy.github.io/nusfitness",
+  "devDependencies": {
+    "cypress": "^8.0.0"
+  }
 }
