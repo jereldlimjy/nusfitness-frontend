@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -41,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "rgba(30, 136, 229, 0.9)",
     },
   },
+  circularProgress: {
+    marginBottom: theme.spacing(1.5)
+  }
 }));
 
 // Weekday and weekend slots for all facilities
@@ -219,6 +223,7 @@ const Booking = ({ handleAlert }) => {
   const [submitValue, setSubmitValue] = useState("Book");
   const [open, setOpen] = useState(false);
   const [creditsLeft, setCreditsLeft] = useState();
+  const [loading, setLoading] = useState(false);
   // Date object
   const now = new Date();
   const day = now.getDay();
@@ -285,6 +290,8 @@ const Booking = ({ handleAlert }) => {
             : "https://salty-reaches-24995.herokuapp.com/"
         }cancel`;
 
+        setLoading(true);
+
         fetch(url, {
           method: "post",
           headers: { "Content-Type": "application/json" },
@@ -296,16 +303,19 @@ const Booking = ({ handleAlert }) => {
         })
           .then((response) => {
             if (response.status === 401) {
+              setLoading(false);
               handleAlert(
                 "You are unauthorised to cancel the slot. Please contact the website's administrator",
                 "error"
               );
             } else if (response.status === 403) {
+              setLoading(false);
               handleAlert(
                 "Unable to cancel slot because it is within the 2 hour cancellation window.",
                 "error"
               );
             } else if (response.status === 404) {
+              setLoading(false);
               handleAlert(
                 "Slot cannot be found. Please contact the website's administrator",
                 "error"
@@ -316,6 +326,7 @@ const Booking = ({ handleAlert }) => {
           })
           .then((data) => {
             if (data.success) {
+              setLoading(false);
               handleAlert("Your slot has been cancelled.", "success");
             }
           })
@@ -328,6 +339,8 @@ const Booking = ({ handleAlert }) => {
             ? "http://local.nusfitness.com:5000"
             : "https://salty-reaches-24995.herokuapp.com"
         }`;
+
+        setLoading(true);
 
         const res = await fetch(`${url}/updateCredits`, {
           method: "post",
@@ -350,9 +363,11 @@ const Booking = ({ handleAlert }) => {
             .then((response) => response.json())
             .then((data) => {
               if (data.success) {
+                setLoading(false);
                 setCreditsLeft(creditsLeft - 1);
                 handleAlert("Your slot has been booked!", "success");
               } else {
+                setLoading(false);
                 handleAlert("Slot has been fully booked.", "error");
               }
               setSelectedSlot({});
@@ -361,6 +376,7 @@ const Booking = ({ handleAlert }) => {
               console.log(err);
             });
         } else {
+          setLoading(false);
           handleAlert("You have insufficient credits left for this week.", "error");
         }
       }
@@ -475,18 +491,24 @@ const Booking = ({ handleAlert }) => {
         {creditsLeft}
       </Box>
 
-      <form onSubmit={handleClickOpen}>
-        {slotContainers}
-        {Object.keys(selectedSlot).length !== 0 && (
-          <Box display="flex" justifyContent="center">
-            <input
-              type="submit"
-              value={submitValue}
-              className={classes.button}
-            />
+      {loading 
+        ? <Box display="flex" flexDirection="column" alignItems="center" mt={3}>
+            <CircularProgress className={classes.circularProgress}/>
+            <Typography variant="h4">Loading...</Typography>
           </Box>
-        )}
-      </form>
+        : <form onSubmit={handleClickOpen}>
+            {slotContainers}
+            {Object.keys(selectedSlot).length !== 0 && (
+              <Box display="flex" justifyContent="center">
+                <input
+                  type="submit"
+                  value={submitValue}
+                  className={classes.button}
+                />
+              </Box>
+            )}
+          </form>
+      }
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>

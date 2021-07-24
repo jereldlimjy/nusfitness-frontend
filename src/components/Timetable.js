@@ -347,7 +347,6 @@ const Timetable = ({ bookedSlots }) => {
         <Button
           onClick={handleShowTimetableChange}
           variant="contained"
-          color="primary"
           className={classes.inputFields}
         >
           {showTimeTable ? "Hide Timetable" : "Show Timetable"}
