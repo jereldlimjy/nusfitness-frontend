@@ -10,12 +10,12 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { addDays } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
 import SlotContainer from "./SlotContainer";
-import { addDays } from "date-fns";
 import Timetable from "./Timetable";
 
 const useStyles = makeStyles((theme) => ({
@@ -43,189 +43,211 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Weekday and weekend slots for all facilities
+const facilities = [
+  {
+    name: "Kent Ridge Swimming Pool",
+    weekdayHours: [
+      "0730",
+      "0900",
+      "1000",
+      "1100",
+      "1200",
+      "1300",
+      "1400",
+      "1500",
+      "1600",
+      "1700",
+      "1800",
+      "1900",
+      "2000",
+    ],
+    weekendHours: [
+      "0900",
+      "1000",
+      "1100",
+      "1200",
+      "1300",
+      "1400",
+      "1500",
+      "1600",
+      "1700",
+      "1800",
+    ],
+  },
+  {
+    name: "University Town Swimming Pool",
+    weekdayHours: [
+      "0730",
+      "0900",
+      "1000",
+      "1100",
+      "1200",
+      "1300",
+      "1400",
+      "1500",
+      "1600",
+      "1700",
+      "1800",
+      "1900",
+      "2000",
+    ],
+    weekendHours: [
+      "0900",
+      "1000",
+      "1100",
+      "1200",
+      "1300",
+      "1400",
+      "1500",
+      "1600",
+      "1700",
+      "1800",
+    ],
+  },
+  {
+    name: "Kent Ridge Gym",
+    weekdayHours: [
+      "1100",
+      "1200",
+      "1300",
+      "1400",
+      "1500",
+      "1600",
+      "1700",
+      "1800",
+      "1900",
+    ],
+    weekendHours: [],
+  },
+  {
+    name: "University Sports Centre Gym",
+    weekdayHours: [
+      "0900",
+      "1000",
+      "1100",
+      "1200",
+      "1300",
+      "1400",
+      "1500",
+      "1600",
+      "1700",
+      "1800",
+      "1900",
+      "2000",
+    ],
+    weekendHours: [
+      "0900",
+      "1000",
+      "1100",
+      "1200",
+      "1300",
+      "1400",
+      "1500",
+      "1600",
+      "1700",
+      "1800",
+    ],
+  },
+  {
+    name: "University Town Gym",
+    weekdayHours: [
+      "0700",
+      "0800",
+      "0900",
+      "1000",
+      "1100",
+      "1200",
+      "1300",
+      "1400",
+      "1500",
+      "1600",
+      "1700",
+      "1800",
+      "1900",
+      "2000",
+      "2100",
+    ],
+    weekendHours: [
+      "0700",
+      "0800",
+      "0900",
+      "1000",
+      "1100",
+      "1200",
+      "1300",
+      "1400",
+      "1500",
+      "1600",
+      "1700",
+      "1800",
+      "1900",
+      "2000",
+      "2100",
+    ],
+  },
+  {
+    name: "Wellness Outreach Gym",
+    weekdayHours: [
+      "0700",
+      "0800",
+      "0900",
+      "1000",
+      "1100",
+      "1200",
+      "1300",
+      "1400",
+      "1500",
+      "1600",
+      "1700",
+      "1800",
+      "1900",
+      "2000",
+      "2100",
+    ],
+    weekendHours: [],
+  },
+];
+
 const Booking = ({ handleAlert }) => {
   const classes = useStyles();
 
-  // Weekday and weekend slots for all facilities
-  const facilities = [
-    {
-      name: "Kent Ridge Swimming Pool",
-      weekdayHours: [
-        "0730",
-        "0900",
-        "1000",
-        "1100",
-        "1200",
-        "1300",
-        "1400",
-        "1500",
-        "1600",
-        "1700",
-        "1800",
-        "1900",
-        "2000",
-      ],
-      weekendHours: [
-        "0900",
-        "1000",
-        "1100",
-        "1200",
-        "1300",
-        "1400",
-        "1500",
-        "1600",
-        "1700",
-        "1800",
-      ],
-    },
-    {
-      name: "University Town Swimming Pool",
-      weekdayHours: [
-        "0730",
-        "0900",
-        "1000",
-        "1100",
-        "1200",
-        "1300",
-        "1400",
-        "1500",
-        "1600",
-        "1700",
-        "1800",
-        "1900",
-        "2000",
-      ],
-      weekendHours: [
-        "0900",
-        "1000",
-        "1100",
-        "1200",
-        "1300",
-        "1400",
-        "1500",
-        "1600",
-        "1700",
-        "1800",
-      ],
-    },
-    {
-      name: "Kent Ridge Gym",
-      weekdayHours: [
-        "1100",
-        "1200",
-        "1300",
-        "1400",
-        "1500",
-        "1600",
-        "1700",
-        "1800",
-        "1900",
-      ],
-      weekendHours: [],
-    },
-    {
-      name: "University Sports Centre Gym",
-      weekdayHours: [
-        "0900",
-        "1000",
-        "1100",
-        "1200",
-        "1300",
-        "1400",
-        "1500",
-        "1600",
-        "1700",
-        "1800",
-        "1900",
-        "2000",
-      ],
-      weekendHours: [
-        "0900",
-        "1000",
-        "1100",
-        "1200",
-        "1300",
-        "1400",
-        "1500",
-        "1600",
-        "1700",
-        "1800",
-      ],
-    },
-    {
-      name: "University Town Gym",
-      weekdayHours: [
-        "0700",
-        "0800",
-        "0900",
-        "1000",
-        "1100",
-        "1200",
-        "1300",
-        "1400",
-        "1500",
-        "1600",
-        "1700",
-        "1800",
-        "1900",
-        "2000",
-        "2100",
-      ],
-      weekendHours: [
-        "0700",
-        "0800",
-        "0900",
-        "1000",
-        "1100",
-        "1200",
-        "1300",
-        "1400",
-        "1500",
-        "1600",
-        "1700",
-        "1800",
-        "1900",
-        "2000",
-        "2100",
-      ],
-    },
-    {
-      name: "Wellness Outreach Gym",
-      weekdayHours: [
-        "0700",
-        "0800",
-        "0900",
-        "1000",
-        "1100",
-        "1200",
-        "1300",
-        "1400",
-        "1500",
-        "1600",
-        "1700",
-        "1800",
-        "1900",
-        "2000",
-        "2100",
-      ],
-      weekendHours: [],
-    },
-  ];
-
-  const [facility, setfacility] = useState(facilities[0]);
+  const [facility, setFacility] = useState(facilities[0]);
   const [selectedSlot, setSelectedSlot] = useState({});
   const [bookedSlots, setBookedSlots] = useState([]);
   const [slotCount, setSlotCount] = useState([]);
   const [submitValue, setSubmitValue] = useState("Book");
   const [open, setOpen] = useState(false);
-
+  const [creditsLeft, setCreditsLeft] = useState();
   // Date object
   const now = new Date();
   const day = now.getDay();
 
+  useEffect(() => {
+    async function getCreditsLeft() {
+      const url = `${
+        window.location.hostname === "local.nusfitness.com"
+          ? "http://local.nusfitness.com:5000/"
+          : "https://salty-reaches-24995.herokuapp.com/"
+      }creditsLeft`;
+  
+      const res = await fetch(url, {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+  
+      const data = await res.json();
+  
+      setCreditsLeft(data.credits);
+    }
+
+    getCreditsLeft();
+  }, []);
+
   // Changing facility
   const handleFacilityChange = (e) => {
-    setfacility(facilities[e.target.value]);
+    setFacility(facilities.filter(facility => facility.name === e.target.value)[0]);
     setSelectedSlot({});
   };
 
@@ -254,7 +276,7 @@ const Booking = ({ handleAlert }) => {
 
   // Submit booking
   const handleSubmit = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault();
       if (submitValue === "Cancel") {
         const url = `${
@@ -303,34 +325,47 @@ const Booking = ({ handleAlert }) => {
       } else {
         const url = `${
           window.location.hostname === "local.nusfitness.com"
-            ? "http://local.nusfitness.com:5000/"
-            : "https://salty-reaches-24995.herokuapp.com/"
-        }book`;
+            ? "http://local.nusfitness.com:5000"
+            : "https://salty-reaches-24995.herokuapp.com"
+        }`;
 
-        fetch(url, {
+        const res = await fetch(`${url}/updateCredits`, {
           method: "post",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            facility: facility.name,
-            ...selectedSlot,
-          }),
           credentials: "include",
         })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              handleAlert("Your slot has been booked!", "success");
-            } else {
-              handleAlert("Slot has been fully booked.", "error");
-            }
-            setSelectedSlot({});
+
+        const data = await res.json();
+
+        if (data.success) {
+          fetch(`${url}/book`, {
+            method: "post",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              facility: facility.name,
+              ...selectedSlot,
+            }),
+            credentials: "include",
           })
-          .catch((err) => {
-            console.log(err);
-          });
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                setCreditsLeft(creditsLeft - 1);
+                handleAlert("Your slot has been booked!", "success");
+              } else {
+                handleAlert("Slot has been fully booked.", "error");
+              }
+              setSelectedSlot({});
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          handleAlert("You have insufficient credits left for this week.", "error");
+        }
       }
     },
-    [submitValue, handleAlert, facility.name, selectedSlot]
+    [submitValue, handleAlert, facility.name, selectedSlot, creditsLeft]
   );
 
   // Retrieve booked slots
@@ -420,19 +455,24 @@ const Booking = ({ handleAlert }) => {
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="facility-label">Select Facility</InputLabel>
           <Select
+            value={facility.name}
             labelId="facility-label"
             id="facility"
             onChange={handleFacilityChange}
             label="Select Facility"
           >
-            <MenuItem value={0}>{facilities[0].name}</MenuItem>
-            <MenuItem value={1}>{facilities[1].name}</MenuItem>
-            <MenuItem value={2}>{facilities[2].name}</MenuItem>
-            <MenuItem value={3}>{facilities[3].name}</MenuItem>
-            <MenuItem value={4}>{facilities[4].name}</MenuItem>
-            <MenuItem value={5}>{facilities[5].name}</MenuItem>
+            {facilities.map((facility, index) => (
+                <MenuItem key={index} value={facility.name}>
+                  {facility.name}
+                </MenuItem>
+            ))}
           </Select>
         </FormControl>
+      </Box>
+
+      <Box display="flex" mt={2} flexDirection="column" alignItems="center">
+        <span>Remaining credits this week: </span>
+        {creditsLeft}
       </Box>
 
       <form onSubmit={handleClickOpen}>

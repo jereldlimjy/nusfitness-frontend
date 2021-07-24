@@ -147,9 +147,6 @@ const Dashboard = () => {
 
   return (
     <Box display="flex">
-      <Box flex="3 0 0">
-        <Chart setTime={setTime} data={data} />
-      </Box>
       <Box
         display="flex"
         flex="1 1 0"
@@ -163,6 +160,7 @@ const Dashboard = () => {
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="facility-label">Select Facility</InputLabel>
             <Select
+              value={facility}
               labelId="facility-label"
               id="facility"
               onChange={handleFacilityChange}
@@ -220,6 +218,9 @@ const Dashboard = () => {
             </Grid>
           ))}
         </Grid>
+      </Box>
+      <Box flex="3 0 0">
+        <Chart setTime={setTime} data={data} />
       </Box>
     </Box>
   );

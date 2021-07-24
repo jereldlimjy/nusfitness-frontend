@@ -54,6 +54,11 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
           {loggedIn ? (
             <Fragment>
               <Button>
+                <Link to="/" className={classes.link}>
+                  Home
+                </Link>
+              </Button>
+              <Button>
                 <Link to="/dashboard" className={classes.link}>
                   Dashboard
                 </Link>
