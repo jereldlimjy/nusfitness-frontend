@@ -7,7 +7,7 @@ import {
   VictoryVoronoiContainer,
 } from "victory";
 
-const Chart = ({ setTime, data }) => {
+const Chart = ({ setTime, data, chartTitle }) => {
   const tickValues = [
     setTime(8, 0),
     setTime(9, 0),
@@ -48,6 +48,13 @@ const Chart = ({ setTime, data }) => {
       width={900}
       padding={{ top: 0, right: 25, bottom: 0, left: 75 }}
     >
+      <VictoryLabel
+        text={chartTitle}
+        x={450}
+        y={-30}
+        textAnchor="middle"
+        style={{ fontSize: 18 }}
+      />
       <VictoryAxis
         label="Time"
         tickValues={tickValues}

@@ -72,6 +72,7 @@ const Dashboard = () => {
     },
   ]);
   const [dayOfWeek, setDayOfWeek] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const [chartTitle, setChartTitle] = useState("");
 
   // Changing facility
   const handleFacilityChange = (e) => {
@@ -145,10 +146,19 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facility, selectedDates, dayOfWeek]);
 
+  useEffect(() => {
+    // console.log(facility);
+    // console.log(selectedDates);
+    // console.log(selectedDates[0].startDate.toDateString());
+    setChartTitle(
+      `${facility},\n${selectedDates[0].startDate.toDateString()} to ${selectedDates[0].endDate.toDateString()} `
+    );
+  }, [facility, selectedDates, dayOfWeek]);
+
   return (
     <Box display="flex">
       <Box flex="3 0 0">
-        <Chart setTime={setTime} data={data} />
+        <Chart setTime={setTime} data={data} chartTitle={chartTitle} />
       </Box>
       <Box
         display="flex"
