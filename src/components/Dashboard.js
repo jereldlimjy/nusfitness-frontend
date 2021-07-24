@@ -151,7 +151,7 @@ const Dashboard = () => {
     // console.log(selectedDates);
     // console.log(selectedDates[0].startDate.toDateString());
     setChartTitle(
-      `${facility},\n${selectedDates[0].startDate.toDateString()} to ${selectedDates[0].endDate.toDateString()} `
+      `${facility}\n${selectedDates[0].startDate.toDateString()} to ${selectedDates[0].endDate.toDateString()} `
     );
   }, [facility, selectedDates, dayOfWeek]);
 
