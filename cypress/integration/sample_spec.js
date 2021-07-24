@@ -97,5 +97,4 @@ describe('View Bookings Page', () => {
 
 // can view slot in bookings
 
-
 // can cancel slot

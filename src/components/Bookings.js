@@ -16,8 +16,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
   },
-  table: {
-    minWidth: 650,
+  tableContainer: {
+    maxWidth: 800,
+    margin: "0 auto",
     marginTop: theme.spacing(2),
   },
 }));
@@ -56,8 +57,8 @@ const Booking = ({ handleAlert, loggedIn }) => {
           <Typography variant="h4" align="center">
             View Bookings
           </Typography>
-          <TableContainer component={Paper}>
-            <Table className={classes.table}>
+          <TableContainer className={classes.tableContainer} component={Paper}>
+            <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>Facility</TableCell>
