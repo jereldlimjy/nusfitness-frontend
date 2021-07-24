@@ -215,6 +215,7 @@ const Booking = ({ handleAlert }) => {
   const [facility, setfacility] = useState(facilities[0]);
   const [selectedSlot, setSelectedSlot] = useState({});
   const [bookedSlots, setBookedSlots] = useState([]);
+  const [allBookedSlots, setAllBookedSlots] = useState([]);
   const [slotCount, setSlotCount] = useState([]);
   const [submitValue, setSubmitValue] = useState("Book");
   const [open, setOpen] = useState(false);
@@ -357,6 +358,27 @@ const Booking = ({ handleAlert }) => {
       .catch((err) => console.log(err));
   }, [handleSubmit, facility.name]);
 
+  // Retrieve all booked slots
+  useEffect(() => {
+    const url = `${
+      window.location.hostname === "local.nusfitness.com"
+        ? "http://local.nusfitness.com:5000/"
+        : "https://salty-reaches-24995.herokuapp.com/"
+    }bookedSlots`;
+    fetch(url, {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((res) =>
+        setAllBookedSlots(
+          res.map((e) => ({ facility: e.facility, date: new Date(e.date) }))
+        )
+      )
+      .catch((err) => console.log(err));
+  }, [handleSubmit]);
+
   // Retrieve slots left
   const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   useEffect(() => {
@@ -411,7 +433,7 @@ const Booking = ({ handleAlert }) => {
 
   return (
     <div className={classes.root}>
-      <Timetable handleAlert={handleAlert} bookedSlots={bookedSlots} />
+      <Timetable handleAlert={handleAlert} bookedSlots={allBookedSlots} />
 
       <Typography variant="h4" align="center">
         Book a Facility
