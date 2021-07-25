@@ -54,7 +54,7 @@ const Slot = ({ date, handleChange, checked, booked, slotsLeft }) => {
         date={date}
         onChange={handleChange}
         checked={checked}
-        disabled={slotsLeft <= 0 || slotTime <= currentTime}
+        disabled={slotTime <= currentTime}
         booked={booked.toString()}
       />
       <label className={classes.slotLabel} htmlFor={date}>
