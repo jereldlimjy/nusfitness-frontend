@@ -212,13 +212,13 @@ const Booking = ({ handleAlert }) => {
     },
   ];
 
-  const [facility, setfacility] = useState(facilities[0]);
+  const [facility, setFacility] = useState(facilities[0]);
   const [selectedSlot, setSelectedSlot] = useState({});
   const [bookedSlots, setBookedSlots] = useState([]);
   const [allBookedSlots, setAllBookedSlots] = useState([]);
   const [slotCount, setSlotCount] = useState([]);
   const [submitValue, setSubmitValue] = useState("Book");
-  const [open, setOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
   // Date object
   const now = new Date();
@@ -226,7 +226,7 @@ const Booking = ({ handleAlert }) => {
 
   // Changing facility
   const handleFacilityChange = (e) => {
-    setfacility(facilities[e.target.value]);
+    setFacility(facilities[e.target.value]);
     setSelectedSlot({});
   };
 
@@ -410,9 +410,9 @@ const Booking = ({ handleAlert }) => {
   // Handle dialog actions
   const handleClickOpen = (e) => {
     e.preventDefault();
-    setOpen(true);
+    setOpenDialog(true);
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => setOpenDialog(false);
 
   const slotContainers = [];
   for (let i = 0; i < 3; i++) {
@@ -473,7 +473,7 @@ const Booking = ({ handleAlert }) => {
         )}
       </form>
 
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={openDialog} onClose={handleClose}>
         <DialogTitle>
           {submitValue === "Book"
             ? "Book selected slot?"
