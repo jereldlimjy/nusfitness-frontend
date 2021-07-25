@@ -408,7 +408,10 @@ const Booking = ({ handleAlert }) => {
   }, [facility, selectedSlot]);
 
   // Handle dialog actions
-  const handleClickOpen = () => setOpen(true);
+  const handleClickOpen = (e) => {
+    e.preventDefault();
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
 
   const slotContainers = [];
