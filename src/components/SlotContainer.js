@@ -34,7 +34,7 @@ const SlotContainer = ({
           const date = new Date(assignedDate);
           date.setHours(hour, minute, 0, 0);
 
-          const maxCap = 20; // adjust depending on facility
+          const maxCap = 40; // adjust depending on facility
           let slotsLeft = maxCap;
 
           // Retrieve number of slots left
