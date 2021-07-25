@@ -16,6 +16,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { addDays } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import SlotContainer from "./SlotContainer";
 import Timetable from "./Timetable";
 
@@ -224,9 +225,12 @@ const Booking = ({ handleAlert }) => {
   const [open, setOpen] = useState(false);
   const [creditsLeft, setCreditsLeft] = useState();
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
   // Date object
   const now = new Date();
   const day = now.getDay();
+
+  console.log(history.location.state);
 
   useEffect(() => {
     async function getCreditsLeft() {

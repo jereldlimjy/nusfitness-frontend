@@ -64,8 +64,8 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
                 </Link>
               </Button>
               <Button>
-                <Link to="/bookings" className={classes.link}>
-                  Bookings
+                <Link to="/profile" className={classes.link}>
+                  Profile
                 </Link>
               </Button>
               <Button>

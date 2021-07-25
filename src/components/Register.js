@@ -68,7 +68,7 @@ const Register = ({ handleAlert, loggedIn, setLoggedIn }) => {
       .then((response) => response.json())
       .then((user) => {
         if (user._id) {
-          handleAlert("Successfully registered!", "success");
+          handleAlert("Successfully registered! Head to the profile section to sync with telegram!", "info");
           setLoggedIn(true);
           history.push("/");
         } else {
