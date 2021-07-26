@@ -14,6 +14,7 @@ import {
   Typography,
   Paper,
 } from "@material-ui/core";
+import { blueGrey, orange, lightBlue } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import { addDays } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
@@ -38,22 +39,23 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     border: 0,
     borderRadius: 5,
-    backgroundColor: "#1E88E5",
+    backgroundColor: lightBlue[600],
     color: "white",
     "&:hover": {
-      backgroundColor: "rgba(30, 136, 229, 0.9)",
+      backgroundColor: lightBlue[700],
     },
   },
   circularProgress: {
-    marginBottom: theme.spacing(1.5)
+    marginBottom: theme.spacing(1.5),
   },
   paper: {
     marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
   header: {
-    paddingTop: theme.spacing(2)
-  }
+    paddingTop: theme.spacing(2),
+  },
 }));
 
 // Weekday and weekend slots for all facilities
@@ -247,15 +249,15 @@ const Booking = ({ handleAlert }) => {
           ? "http://local.nusfitness.com:5000/"
           : "https://salty-reaches-24995.herokuapp.com/"
       }creditsLeft`;
-  
+
       const res = await fetch(url, {
         method: "post",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
       });
-  
+
       const data = await res.json();
-  
+
       setCreditsLeft(data.credits);
     }
 
@@ -264,7 +266,9 @@ const Booking = ({ handleAlert }) => {
 
   // Changing facility
   const handleFacilityChange = (e) => {
-    setFacility(facilities.filter(facility => facility.name === e.target.value)[0]);
+    setFacility(
+      facilities.filter((facility) => facility.name === e.target.value)[0]
+    );
     setSelectedSlot({});
   };
 
@@ -358,7 +362,7 @@ const Booking = ({ handleAlert }) => {
           method: "post",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-        })
+        });
 
         const data = await res.json();
 
@@ -389,7 +393,10 @@ const Booking = ({ handleAlert }) => {
             });
         } else {
           setLoading(false);
-          handleAlert("You have insufficient credits left for this week.", "error");
+          handleAlert(
+            "You have insufficient credits left for this week.",
+            "error"
+          );
         }
       }
     },
@@ -491,9 +498,9 @@ const Booking = ({ handleAlert }) => {
               label="Select Facility"
             >
               {facilities.map((facility, index) => (
-                  <MenuItem key={index} value={facility.name}>
-                    {facility.name}
-                  </MenuItem>
+                <MenuItem key={index} value={facility.name}>
+                  {facility.name}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -504,24 +511,25 @@ const Booking = ({ handleAlert }) => {
           {creditsLeft}
         </Box>
 
-        {loading 
-          ? <Box display="flex" flexDirection="column" alignItems="center" mt={3}>
-              <CircularProgress className={classes.circularProgress}/>
-              <Typography variant="h4">Loading...</Typography>
-            </Box>
-          : <form onSubmit={handleClickOpen}>
-              {slotContainers}
-              {Object.keys(selectedSlot).length !== 0 && (
-                <Box display="flex" justifyContent="center">
-                  <input
-                    type="submit"
-                    value={submitValue}
-                    className={classes.button}
-                  />
-                </Box>
-              )}
-            </form>
-        }
+        {loading ? (
+          <Box display="flex" flexDirection="column" alignItems="center" mt={3}>
+            <CircularProgress className={classes.circularProgress} />
+            <Typography variant="h4">Loading...</Typography>
+          </Box>
+        ) : (
+          <form onSubmit={handleClickOpen}>
+            {slotContainers}
+            {Object.keys(selectedSlot).length !== 0 && (
+              <Box display="flex" justifyContent="center">
+                <input
+                  type="submit"
+                  value={submitValue}
+                  className={classes.button}
+                />
+              </Box>
+            )}
+          </form>
+        )}
       </Paper>
 
       <Dialog open={open} onClose={handleClose}>

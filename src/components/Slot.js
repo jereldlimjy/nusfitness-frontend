@@ -1,4 +1,5 @@
 import { Card } from "@material-ui/core";
+import { blueGrey, orange, lightBlue } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import { addHours } from "date-fns";
 
@@ -13,13 +14,13 @@ const useStyles = makeStyles((theme) => ({
       color: "rgb(170, 170, 170)",
     },
     "&[booked='true'] ~ label": {
-      backgroundColor: "forestgreen",
+      backgroundColor: orange[400],
     },
     "&[booked='true']:checked ~ label": {
-      backgroundColor: "#ef7c00",
+      backgroundColor: blueGrey[400],
     },
     "&:checked ~ label": {
-      backgroundColor: "#ef7c00",
+      backgroundColor: blueGrey[200],
     },
   },
   slotLabel: {

@@ -13,7 +13,13 @@ import {
   TextField,
   Tooltip,
 } from "@material-ui/core";
-import { blue, red } from "@material-ui/core/colors";
+import {
+  blue,
+  red,
+  blueGrey,
+  orange,
+  lightBlue,
+} from "@material-ui/core/colors";
 import qs from "query-string";
 import { castArray, invert, mapValues } from "lodash";
 import addDays from "date-fns/addDays";
@@ -83,7 +89,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     marginBottom: theme.spacing(2),
   },
-  inputFields: {
+  button: {
+    marginRight: theme.spacing(2),
+    backgroundColor: lightBlue[600],
+  },
+  inputField: {
     marginRight: theme.spacing(2),
   },
   select: {
@@ -347,7 +357,7 @@ const Timetable = ({ bookedSlots }) => {
         <Button
           onClick={handleShowTimetableChange}
           variant="contained"
-          className={classes.inputFields}
+          className={classes.button}
         >
           {showTimeTable ? "Hide Timetable" : "Show Timetable"}
         </Button>
@@ -364,7 +374,7 @@ const Timetable = ({ bookedSlots }) => {
               onClick={handleShowLessons}
               variant="contained"
               color="secondary"
-              className={classes.inputFields}
+              className={classes.button}
             >
               {showLessons ? "Hide Lessons" : "Always Show Lessons"}
             </Button>
@@ -393,7 +403,7 @@ const Timetable = ({ bookedSlots }) => {
             value={timeTableLink}
             variant="outlined"
             onChange={handleLinkChange}
-            className={classes.inputFields}
+            className={classes.inputField}
           />
         )}
       </Box>
