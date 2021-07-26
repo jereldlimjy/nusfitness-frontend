@@ -1,4 +1,5 @@
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import { lightBlue } from "@material-ui/core/colors";
 import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
@@ -11,7 +12,11 @@ import Register from "./components/Register";
 import Profile from "./components/Profile";
 
 const theme = createMuiTheme({
-  palette: {},
+  palette: {
+    primary: {
+      main: lightBlue[700],
+    },
+  },
   overrides: {
     MuiButton: {
       contained: {

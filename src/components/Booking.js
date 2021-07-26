@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: lightBlue[600],
     color: "white",
     "&:hover": {
-      backgroundColor: lightBlue[700],
+      backgroundColor: lightBlue[800],
     },
   },
   circularProgress: {

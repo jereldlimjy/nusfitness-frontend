@@ -7,6 +7,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import React, { useState } from "react";
+import { lightBlue } from "@material-ui/core/colors";
 import { Link, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -28,6 +29,12 @@ const useStyles = makeStyles((theme) => ({
   helperText: {
     textAlign: "center",
     marginTop: theme.spacing(2),
+  },
+  button: {
+    backgroundColor: lightBlue[600],
+    "&:hover": {
+      backgroundColor: lightBlue[800],
+    },
   },
   link: {
     color: "#EF7C00",
@@ -105,6 +112,7 @@ const Login = ({ handleAlert, loggedIn, setLoggedIn }) => {
           type="submit"
           onSubmit={onSubmit}
           disableElevation
+          className={classes.button}
         >
           Login
         </Button>
