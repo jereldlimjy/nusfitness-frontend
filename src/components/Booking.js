@@ -547,7 +547,7 @@ const Booking = ({ handleAlert }) => {
         {loading ? (
           <Box display="flex" flexDirection="column" alignItems="center" mt={3}>
             <CircularProgress className={classes.circularProgress} />
-            <Typography variant="h4">Processing Your Request...</Typography>
+            <Typography variant="h5">Processing Your Request...</Typography>
           </Box>
         ) : (
           <form onSubmit={handleClickOpen}>
