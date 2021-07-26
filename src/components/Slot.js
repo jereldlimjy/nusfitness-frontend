@@ -1,9 +1,10 @@
+import { Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { addHours } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    border: "1px solid #EF7C00",
+    // border: "1px solid #EF7C00",
     margin: theme.spacing(0.5),
   },
   slot: {
@@ -46,7 +47,7 @@ const Slot = ({ date, handleChange, checked, booked, slotsLeft }) => {
   const currentTime = new Date().getTime();
 
   return (
-    <div className={classes.root}>
+    <Card className={classes.root}>
       <input
         type="checkbox"
         className={classes.slot}
@@ -64,7 +65,7 @@ const Slot = ({ date, handleChange, checked, booked, slotsLeft }) => {
         className={classes.slotLabel}
         htmlFor={date}
       >{`${slotsLeft} Left`}</label>
-    </div>
+    </Card>
   );
 };
 
