@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/nusfitness/static/css/main.330494a2.chunk.css",
-    "main.js": "/nusfitness/static/js/main.75937c3a.chunk.js",
-    "main.js.map": "/nusfitness/static/js/main.75937c3a.chunk.js.map",
+    "main.js": "/nusfitness/static/js/main.d0ced767.chunk.js",
+    "main.js.map": "/nusfitness/static/js/main.d0ced767.chunk.js.map",
     "runtime-main.js": "/nusfitness/static/js/runtime-main.76418528.js",
     "runtime-main.js.map": "/nusfitness/static/js/runtime-main.76418528.js.map",
     "static/css/2.c2e18bb2.chunk.css": "/nusfitness/static/css/2.c2e18bb2.chunk.css",
-    "static/js/2.0290b5bb.chunk.js": "/nusfitness/static/js/2.0290b5bb.chunk.js",
-    "static/js/2.0290b5bb.chunk.js.map": "/nusfitness/static/js/2.0290b5bb.chunk.js.map",
+    "static/js/2.b55434ed.chunk.js": "/nusfitness/static/js/2.b55434ed.chunk.js",
+    "static/js/2.b55434ed.chunk.js.map": "/nusfitness/static/js/2.b55434ed.chunk.js.map",
     "index.html": "/nusfitness/index.html",
     "static/css/2.c2e18bb2.chunk.css.map": "/nusfitness/static/css/2.c2e18bb2.chunk.css.map",
     "static/css/main.330494a2.chunk.css.map": "/nusfitness/static/css/main.330494a2.chunk.css.map",
-    "static/js/2.0290b5bb.chunk.js.LICENSE.txt": "/nusfitness/static/js/2.0290b5bb.chunk.js.LICENSE.txt"
+    "static/js/2.b55434ed.chunk.js.LICENSE.txt": "/nusfitness/static/js/2.b55434ed.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.76418528.js",
     "static/css/2.c2e18bb2.chunk.css",
-    "static/js/2.0290b5bb.chunk.js",
+    "static/js/2.b55434ed.chunk.js",
     "static/css/main.330494a2.chunk.css",
-    "static/js/main.75937c3a.chunk.js"
+    "static/js/main.d0ced767.chunk.js"
   ]
 }
