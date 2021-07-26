@@ -1,5 +1,5 @@
 import { Card } from "@material-ui/core";
-import { blueGrey, orange, lightBlue } from "@material-ui/core/colors";
+import { blueGrey, orange } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import { addHours } from "date-fns";
 

@@ -10,11 +10,12 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  Select,
-  Typography,
-  Paper,
+
+
+  Paper, Select,
+  Typography
 } from "@material-ui/core";
-import { blueGrey, orange, lightBlue } from "@material-ui/core/colors";
+import { blueGrey, lightBlue } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import { addDays } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
@@ -47,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
   circularProgress: {
     marginBottom: theme.spacing(1.5),
+    color: blueGrey[200]
   },
   paper: {
     marginLeft: theme.spacing(2),

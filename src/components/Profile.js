@@ -13,6 +13,7 @@ import {
   Typography
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { blueGrey } from "@material-ui/core/colors";
 import { useEffect, useState } from "react";
 import Dashboard from "./Dashboard";
 import TelegramLogin from "./TelegramLogin";
@@ -31,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
     width: "inherit",
   },
   circularProgress: {
-    margin: "0 auto"
+    margin: "0 auto",
+    color: blueGrey[200]
   },
   profileBox: {
     border: "1px solid grey",
