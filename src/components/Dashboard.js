@@ -233,7 +233,7 @@ const Dashboard = () => {
         </Grid>
       </Box>
       <Box flex="3 0 0">
-        <Chart setTime={setTime} data={data} />
+        <Chart setTime={setTime} data={data} chartTitle={chartTitle} />
       </Box>
     </Box>
   );
