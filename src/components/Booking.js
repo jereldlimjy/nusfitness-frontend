@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
@@ -508,15 +509,14 @@ const Booking = ({ handleAlert }) => {
           </FormControl>
         </Box>
 
-        <Box display="flex" mt={2} flexDirection="column" alignItems="center">
-          <span>Remaining credits this week: </span>
-          {creditsLeft}
+        <Box display="flex" mt={2} justifyContent="center">
+          <Chip label={<Typography><strong>Remaining credits this week:</strong> {creditsLeft}</Typography>} />
         </Box>
 
         {loading ? (
           <Box display="flex" flexDirection="column" alignItems="center" mt={3}>
             <CircularProgress className={classes.circularProgress} />
-            <Typography variant="h4">Loading...</Typography>
+            <Typography variant="h4">Processing Your Request...</Typography>
           </Box>
         ) : (
           <form onSubmit={handleClickOpen}>
