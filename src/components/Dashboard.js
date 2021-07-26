@@ -9,9 +9,8 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Typography,
+  Typography
 } from "@material-ui/core";
-import { blueGrey, lightBlue } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import { addDays } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -22,6 +21,9 @@ import Chart from "./Chart";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: "column",
+    },
     padding: theme.spacing(2),
     "& .MuiCheckbox-colorPrimary.Mui-checked": {
       color: "rgb(61, 145, 255)",
@@ -125,6 +127,7 @@ const Dashboard = () => {
         ? "http://local.nusfitness.com:5000/"
         : "https://salty-reaches-24995.herokuapp.com/"
     }traffic`;
+    
     fetch(url, {
       method: "post",
       headers: {

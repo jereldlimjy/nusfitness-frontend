@@ -414,6 +414,9 @@ const Booking = ({ handleAlert }) => {
         ? "http://local.nusfitness.com:5000/"
         : "https://salty-reaches-24995.herokuapp.com/"
     }bookedSlots`;
+
+    setLoading(true);
+
     fetch(url, {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -423,12 +426,16 @@ const Booking = ({ handleAlert }) => {
       credentials: "include",
     })
       .then((res) => res.json())
-      .then((res) =>
+      .then((res) => {
         setBookedSlots(
           res.map((e) => ({ facility: e.facility, date: new Date(e.date) }))
-        )
-      )
-      .catch((err) => console.log(err));
+        );
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
   }, [handleSubmit, facility.name]);
 
   // Retrieve all booked slots
@@ -534,15 +541,17 @@ const Booking = ({ handleAlert }) => {
           </FormControl>
         </Box>
 
-        <Box display="flex" mt={2} justifyContent="center">
-          <Chip
-            label={
-              <Typography>
-                <strong>Remaining credits this week:</strong> {creditsLeft}
-              </Typography>
-            }
-          />
-        </Box>
+        {!loading && (
+          <Box display="flex" mt={2} justifyContent="center">
+            <Chip
+              label={
+                <Typography>
+                  <strong>Remaining credits this week:</strong> {creditsLeft}
+                </Typography>
+              }
+            />
+          </Box>
+        )}
 
         {loading ? (
           <Box display="flex" flexDirection="column" alignItems="center" mt={3}>
