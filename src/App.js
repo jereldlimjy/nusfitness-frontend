@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import Alert from "./components/Alert";
-import Bookings from "./components/Bookings";
 import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import Register from "./components/Register";
+import Profile from "./components/Profile";
 
 const theme = createMuiTheme({
   palette: {},
@@ -80,8 +80,8 @@ const App = () => {
             <Route exact path="/dashboard">
               <Dashboard />
             </Route>
-            <Route exact path="/bookings">
-              <Bookings handleAlert={handleAlert} loggedIn={loggedIn} />
+            <Route exact path="/profile">
+              <Profile handleAlert={handleAlert} loggedIn={loggedIn} />
             </Route>
             <Route exact path="/register">
               <Register

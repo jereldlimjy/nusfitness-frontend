@@ -11,6 +11,7 @@ import {
   Select,
   Typography,
 } from "@material-ui/core";
+import { blueGrey, lightBlue } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import { addDays } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -30,7 +31,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     width: "100%",
   },
-  selectButton: {},
+  selectButton: {
+    backgroundColor: "rgb(61, 145, 255)",
+  },
 }));
 
 const Dashboard = () => {
@@ -156,10 +159,7 @@ const Dashboard = () => {
   }, [facility, selectedDates, dayOfWeek]);
 
   return (
-    <Box display="flex">
-      <Box flex="3 0 0">
-        <Chart setTime={setTime} data={data} chartTitle={chartTitle} />
-      </Box>
+    <Box display="flex" className={classes.root}>
       <Box
         display="flex"
         flex="1 1 0"
@@ -173,6 +173,7 @@ const Dashboard = () => {
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="facility-label">Select Facility</InputLabel>
             <Select
+              value={facility}
               labelId="facility-label"
               id="facility"
               onChange={handleFacilityChange}
@@ -230,6 +231,9 @@ const Dashboard = () => {
             </Grid>
           ))}
         </Grid>
+      </Box>
+      <Box flex="3 0 0">
+        <Chart setTime={setTime} data={data} />
       </Box>
     </Box>
   );

@@ -1,8 +1,7 @@
 import {
-  Scheduler,
-  WeekView,
   Appointments,
-  CurrentTimeIndicator,
+  CurrentTimeIndicator, Scheduler,
+  WeekView
 } from "@devexpress/dx-react-scheduler-material-ui";
 import {
   Box,
@@ -11,15 +10,21 @@ import {
   MenuItem,
   Paper,
   TextField,
-  Tooltip,
+  Tooltip
 } from "@material-ui/core";
-import { blue, red } from "@material-ui/core/colors";
-import qs from "query-string";
-import { castArray, invert, mapValues } from "lodash";
-import addDays from "date-fns/addDays";
-import { useEffect, useState } from "react";
-import nusmoderator from "nusmoderator";
+import {
+  blue,
+
+  blueGrey,
+
+  lightBlue, red
+} from "@material-ui/core/colors";
 import { addHours, addMinutes } from "date-fns";
+import addDays from "date-fns/addDays";
+import { castArray, invert, mapValues } from "lodash";
+import nusmoderator from "nusmoderator";
+import qs from "query-string";
+import { useEffect, useState } from "react";
 
 const LESSON_SEP = ",";
 const LESSON_TYPE_SEP = ":";
@@ -83,7 +88,21 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     marginBottom: theme.spacing(2),
   },
-  inputFields: {
+  timetableButton: {
+    marginRight: theme.spacing(2),
+    backgroundColor: lightBlue[600],
+    "&:hover": {
+      backgroundColor: lightBlue[700],
+    },
+  },
+  lessonsButton: {
+    marginRight: theme.spacing(2),
+    backgroundColor: blueGrey[400],
+    "&:hover": {
+      backgroundColor:  blueGrey[500],
+    },
+  },
+  inputField: {
     marginRight: theme.spacing(2),
   },
   select: {
@@ -227,6 +246,7 @@ const Timetable = ({ bookedSlots }) => {
         }
       )
         .then((res) => res.json())
+        // eslint-disable-next-line
         .then((moduleData) => {
           // Retrieve this semester's module data
           const [currentSemesterData] = moduleData.semesterData.filter(
@@ -347,8 +367,7 @@ const Timetable = ({ bookedSlots }) => {
         <Button
           onClick={handleShowTimetableChange}
           variant="contained"
-          color="primary"
-          className={classes.inputFields}
+          className={classes.timetableButton}
         >
           {showTimeTable ? "Hide Timetable" : "Show Timetable"}
         </Button>
@@ -365,7 +384,7 @@ const Timetable = ({ bookedSlots }) => {
               onClick={handleShowLessons}
               variant="contained"
               color="secondary"
-              className={classes.inputFields}
+              className={classes.lessonsButton}
             >
               {showLessons ? "Hide Lessons" : "Always Show Lessons"}
             </Button>
@@ -394,7 +413,7 @@ const Timetable = ({ bookedSlots }) => {
             value={timeTableLink}
             variant="outlined"
             onChange={handleLinkChange}
-            className={classes.inputFields}
+            className={classes.inputField}
           />
         )}
       </Box>
