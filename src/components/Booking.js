@@ -265,7 +265,6 @@ const Booking = ({ handleAlert }) => {
       const data = await res.json();
 
       setCreditsLeft(data.credits);
-      setLoading(false);
     }
 
     getCreditsLeft();
@@ -359,8 +358,10 @@ const Booking = ({ handleAlert }) => {
 
   // Update booked slots and slots left upon changing facility
   useEffect(async () => {
+    setLoading(true);
     await getBookedSlots();
     await getSlotsLeft();
+    setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facility]);
 
