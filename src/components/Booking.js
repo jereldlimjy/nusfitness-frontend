@@ -302,80 +302,108 @@ const Booking = ({ handleAlert }) => {
         : setSubmitValue("Book"));
   };
 
+  // Retrieve booked slots
+  const getBookedSlots = async () => {
+    try {
+      const url = `${
+        window.location.hostname === "local.nusfitness.com"
+          ? "http://local.nusfitness.com:5000/"
+          : "https://salty-reaches-24995.herokuapp.com/"
+      }bookedSlots`;
+
+      const res = await fetch(url, {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          facility: facility.name,
+        }),
+        credentials: "include",
+      });
+      const data = await res.json();
+      setBookedSlots(
+        data.map((e) => ({ facility: e.facility, date: new Date(e.date) }))
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Retrieve slots left
+  const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const getSlotsLeft = async () => {
+    try {
+      const url = `${
+        window.location.hostname === "local.nusfitness.com"
+          ? "http://local.nusfitness.com:5000/"
+          : "https://salty-reaches-24995.herokuapp.com/"
+      }slots`;
+
+      const res = await fetch(url, {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          facility: facility.name,
+          startDate: todayDate,
+          endDate: addDays(todayDate, 3),
+        }),
+        credentials: "include",
+      });
+      const data = await res.json();
+      setSlotCount(
+        data.map((e) => ({ date: new Date(e._id), count: e.count }))
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Update booked slots and slots left upon changing facility
+  useEffect(async () => {
+    await getBookedSlots();
+    await getSlotsLeft();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [facility]);
+
   // Submit booking
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
       setSelectedSlot({});
 
-      if (submitValue === "Cancel") {
-        const url = `${
-          window.location.hostname === "local.nusfitness.com"
-            ? "http://local.nusfitness.com:5000/"
-            : "https://salty-reaches-24995.herokuapp.com/"
-        }cancel`;
+      // Retrieve all booked slots
+      const getAllBookedSlots = async () => {
+        try {
+          const url = `${
+            window.location.hostname === "local.nusfitness.com"
+              ? "http://local.nusfitness.com:5000/"
+              : "https://salty-reaches-24995.herokuapp.com/"
+          }bookedSlots`;
 
-        setLoading(true);
-
-        fetch(url, {
-          method: "post",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            facility: facility.name,
-            ...selectedSlot,
-          }),
-          credentials: "include",
-        })
-          .then((response) => {
-            if (response.status === 401) {
-              setLoading(false);
-              handleAlert(
-                "You are unauthorised to cancel the slot. Please contact the website's administrator",
-                "error"
-              );
-            } else if (response.status === 403) {
-              setLoading(false);
-              handleAlert(
-                "Unable to cancel slot because it is within the 2 hour cancellation window.",
-                "error"
-              );
-            } else if (response.status === 404) {
-              setLoading(false);
-              handleAlert(
-                "Slot cannot be found. Please contact the website's administrator",
-                "error"
-              );
-            }
-            return response.json();
-          })
-          .then((data) => {
-            if (data.success) {
-              setLoading(false);
-              handleAlert("Your slot has been cancelled.", "success");
-            }
-          })
-          .catch((err) => {
-            console.log(err);
+          const res = await fetch(url, {
+            method: "post",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
           });
-      } else {
-        const url = `${
-          window.location.hostname === "local.nusfitness.com"
-            ? "http://local.nusfitness.com:5000"
-            : "https://salty-reaches-24995.herokuapp.com"
-        }`;
+          const data = await res.json();
+          setAllBookedSlots(
+            data.map((e) => ({ facility: e.facility, date: new Date(e.date) }))
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      };
 
-        setLoading(true);
+      if (submitValue === "Cancel") {
+        try {
+          const url = `${
+            window.location.hostname === "local.nusfitness.com"
+              ? "http://local.nusfitness.com:5000/"
+              : "https://salty-reaches-24995.herokuapp.com/"
+          }cancel`;
 
-        const res = await fetch(`${url}/updateCredits`, {
-          method: "post",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        });
+          setLoading(true);
 
-        const data = await res.json();
-
-        if (data.success) {
-          fetch(`${url}/book`, {
+          const response = await fetch(url, {
             method: "post",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -383,108 +411,92 @@ const Booking = ({ handleAlert }) => {
               ...selectedSlot,
             }),
             credentials: "include",
-          })
-            .then((response) => response.json())
-            .then((data) => {
+          });
+          if (response.status === 401) {
+            handleAlert(
+              "You are unauthorised to cancel the slot. Please contact the website's administrator",
+              "error"
+            );
+          } else if (response.status === 403) {
+            handleAlert(
+              "Unable to cancel slot because it is within the 2 hour cancellation window.",
+              "error"
+            );
+          } else if (response.status === 404) {
+            handleAlert(
+              "Slot cannot be found. Please contact the website's administrator",
+              "error"
+            );
+          }
+          const data = await response.json();
+          if (data.success) {
+            handleAlert("Your slot has been cancelled.", "success");
+          }
+
+          await getBookedSlots();
+          await getAllBookedSlots();
+          await getSlotsLeft();
+          setLoading(false);
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        try {
+          const url = `${
+            window.location.hostname === "local.nusfitness.com"
+              ? "http://local.nusfitness.com:5000"
+              : "https://salty-reaches-24995.herokuapp.com"
+          }`;
+
+          setLoading(true);
+
+          const res = await fetch(`${url}/updateCredits`, {
+            method: "post",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          });
+
+          const data = await res.json();
+
+          if (data.success) {
+            try {
+              const res = await fetch(`${url}/book`, {
+                method: "post",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  facility: facility.name,
+                  ...selectedSlot,
+                }),
+                credentials: "include",
+              });
+              const data = await res.json();
               if (data.success) {
-                setLoading(false);
                 setCreditsLeft(creditsLeft - 1);
                 handleAlert("Your slot has been booked!", "success");
               } else {
-                setLoading(false);
                 handleAlert("Slot has been fully booked.", "error");
               }
-            })
-            .catch((err) => {
+            } catch (err) {
               console.log(err);
-            });
-        } else {
-          setLoading(false);
-          handleAlert(
-            "You have insufficient credits left for this week.",
-            "error"
-          );
+            }
+          } else {
+            handleAlert(
+              "You have insufficient credits left for this week.",
+              "error"
+            );
+          }
+        } catch (err) {
+          console.log(err);
         }
+
+        await getBookedSlots();
+        await getAllBookedSlots();
+        await getSlotsLeft();
+        setLoading(false);
       }
     },
     [submitValue, handleAlert, facility.name, selectedSlot, creditsLeft]
   );
-
-  // Retrieve booked slots
-  useEffect(() => {
-    const url = `${
-      window.location.hostname === "local.nusfitness.com"
-        ? "http://local.nusfitness.com:5000/"
-        : "https://salty-reaches-24995.herokuapp.com/"
-    }bookedSlots`;
-
-    fetch(url, {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        facility: facility.name,
-      }),
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setBookedSlots(
-          res.map((e) => ({ facility: e.facility, date: new Date(e.date) }))
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [handleSubmit, facility.name]);
-
-  // Retrieve all booked slots
-  useEffect(() => {
-    const url = `${
-      window.location.hostname === "local.nusfitness.com"
-        ? "http://local.nusfitness.com:5000/"
-        : "https://salty-reaches-24995.herokuapp.com/"
-    }bookedSlots`;
-    fetch(url, {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((res) =>
-        setAllBookedSlots(
-          res.map((e) => ({ facility: e.facility, date: new Date(e.date) }))
-        )
-      )
-      .catch((err) => console.log(err));
-  }, [handleSubmit]);
-
-  // Retrieve slots left
-  const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  useEffect(() => {
-    const url = `${
-      window.location.hostname === "local.nusfitness.com"
-        ? "http://local.nusfitness.com:5000/"
-        : "https://salty-reaches-24995.herokuapp.com/"
-    }slots`;
-    fetch(url, {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        facility: facility.name,
-        startDate: todayDate,
-        endDate: addDays(todayDate, 3),
-      }),
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((res) =>
-        setSlotCount(
-          res.map((e) => ({ date: new Date(e._id), count: e.count }))
-        )
-      )
-      .catch((err) => console.log(err));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [facility, selectedSlot]);
 
   // Handle dialog actions
   const handleClickOpen = (e) => {
