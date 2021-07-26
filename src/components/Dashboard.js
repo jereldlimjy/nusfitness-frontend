@@ -146,7 +146,7 @@ const Dashboard = () => {
   }, [facility, selectedDates, dayOfWeek]);
 
   return (
-    <Box display="flex">
+    <Box display="flex" className={classes.root}>
       <Box
         display="flex"
         flex="1 1 0"

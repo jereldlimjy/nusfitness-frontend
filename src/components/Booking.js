@@ -11,7 +11,8 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Typography
+  Typography,
+  Paper,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { addDays } from "date-fns";
@@ -45,6 +46,13 @@ const useStyles = makeStyles((theme) => ({
   },
   circularProgress: {
     marginBottom: theme.spacing(1.5)
+  },
+  paper: {
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2)
+  },
+  header: {
+    paddingTop: theme.spacing(2)
   }
 }));
 
@@ -468,51 +476,53 @@ const Booking = ({ handleAlert }) => {
     <div className={classes.root}>
       <Timetable handleAlert={handleAlert} bookedSlots={bookedSlots} />
 
-      <Typography variant="h4" align="center">
-        Book a Facility
-      </Typography>
-      <Box className={classes.box}>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel id="facility-label">Select Facility</InputLabel>
-          <Select
-            value={facility.name}
-            labelId="facility-label"
-            id="facility"
-            onChange={handleFacilityChange}
-            label="Select Facility"
-          >
-            {facilities.map((facility, index) => (
-                <MenuItem key={index} value={facility.name}>
-                  {facility.name}
-                </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
+      <Paper className={classes.paper}>
+        <Typography variant="h4" align="center" className={classes.header}>
+          Book a Facility
+        </Typography>
+        <Box className={classes.box}>
+          <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel id="facility-label">Select Facility</InputLabel>
+            <Select
+              value={facility.name}
+              labelId="facility-label"
+              id="facility"
+              onChange={handleFacilityChange}
+              label="Select Facility"
+            >
+              {facilities.map((facility, index) => (
+                  <MenuItem key={index} value={facility.name}>
+                    {facility.name}
+                  </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
 
-      <Box display="flex" mt={2} flexDirection="column" alignItems="center">
-        <span>Remaining credits this week: </span>
-        {creditsLeft}
-      </Box>
+        <Box display="flex" mt={2} flexDirection="column" alignItems="center">
+          <span>Remaining credits this week: </span>
+          {creditsLeft}
+        </Box>
 
-      {loading 
-        ? <Box display="flex" flexDirection="column" alignItems="center" mt={3}>
-            <CircularProgress className={classes.circularProgress}/>
-            <Typography variant="h4">Loading...</Typography>
-          </Box>
-        : <form onSubmit={handleClickOpen}>
-            {slotContainers}
-            {Object.keys(selectedSlot).length !== 0 && (
-              <Box display="flex" justifyContent="center">
-                <input
-                  type="submit"
-                  value={submitValue}
-                  className={classes.button}
-                />
-              </Box>
-            )}
-          </form>
-      }
+        {loading 
+          ? <Box display="flex" flexDirection="column" alignItems="center" mt={3}>
+              <CircularProgress className={classes.circularProgress}/>
+              <Typography variant="h4">Loading...</Typography>
+            </Box>
+          : <form onSubmit={handleClickOpen}>
+              {slotContainers}
+              {Object.keys(selectedSlot).length !== 0 && (
+                <Box display="flex" justifyContent="center">
+                  <input
+                    type="submit"
+                    value={submitValue}
+                    className={classes.button}
+                  />
+                </Box>
+              )}
+            </form>
+        }
+      </Paper>
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>

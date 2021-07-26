@@ -161,7 +161,9 @@ const Profile = ({ handleAlert, loggedIn }) => {
 
             <Chip className={classes.chip} label={<Typography><strong>Remaining credits this week:</strong> {creditsLeft}</Typography>} />
 
-            <TelegramLogin className={classes.telegramLogin} />
+            <Box display="flex" justifyContent="center" className={classes.telegramLogin}>
+              <TelegramLogin />
+            </Box>
           </Box>
 
           {/* Bookings */}
