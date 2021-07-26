@@ -21,6 +21,9 @@ import Chart from "./Chart";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: "column",
+    },
     padding: theme.spacing(2),
     "& .MuiCheckbox-colorPrimary.Mui-checked": {
       color: "rgb(61, 145, 255)",
