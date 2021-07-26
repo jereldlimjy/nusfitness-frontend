@@ -254,6 +254,8 @@ const Booking = ({ handleAlert }) => {
           : "https://salty-reaches-24995.herokuapp.com/"
       }creditsLeft`;
 
+      setLoading(true);
+
       const res = await fetch(url, {
         method: "post",
         headers: { "Content-Type": "application/json" },
@@ -263,6 +265,7 @@ const Booking = ({ handleAlert }) => {
       const data = await res.json();
 
       setCreditsLeft(data.credits);
+      setLoading(false);
     }
 
     getCreditsLeft();
@@ -415,8 +418,6 @@ const Booking = ({ handleAlert }) => {
         : "https://salty-reaches-24995.herokuapp.com/"
     }bookedSlots`;
 
-    setLoading(true);
-
     fetch(url, {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -430,10 +431,8 @@ const Booking = ({ handleAlert }) => {
         setBookedSlots(
           res.map((e) => ({ facility: e.facility, date: new Date(e.date) }))
         );
-        setLoading(false);
       })
       .catch((err) => {
-        setLoading(false);
         console.log(err);
       });
   }, [handleSubmit, facility.name]);

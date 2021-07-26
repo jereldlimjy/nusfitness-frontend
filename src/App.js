@@ -47,6 +47,7 @@ const theme = createMuiTheme({
 const App = () => {
   const [alert, setAlert] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleAlert = (msg, type, time = 3000) => {
     setAlert({ msg, type });
@@ -62,16 +63,21 @@ const App = () => {
         ? "http://local.nusfitness.com:5000/"
         : "https://salty-reaches-24995.herokuapp.com/"
     }isLoggedIn`;
+
+    setLoading(true);
+
     fetch(url, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
         setLoggedIn(data.authenticated);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
         setLoggedIn(false);
+        setLoading(false);
       });
   }, []);
 
@@ -107,6 +113,7 @@ const App = () => {
                 handleAlert={handleAlert}
                 loggedIn={loggedIn}
                 setLoggedIn={setLoggedIn}
+                loading={loading}
               />
             </Route>
           </Switch>
