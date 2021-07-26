@@ -11,6 +11,7 @@ import {
   Select,
   Typography,
 } from "@material-ui/core";
+import { blueGrey, lightBlue } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import { addDays } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -30,7 +31,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     width: "100%",
   },
-  selectButton: {},
+  selectButton: {
+    backgroundColor: "rgb(61, 145, 255)",
+  },
 }));
 
 const Dashboard = () => {

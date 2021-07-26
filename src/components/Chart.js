@@ -46,7 +46,7 @@ const Chart = ({ setTime, data }) => {
       maxDomain={{ x: setTime(22, 0), y: 40 }}
       height={250}
       width={900}
-      padding={{ top: 0, right: 25, bottom: 0, left: 75 }}
+      padding={{ top: 0, right: 25, bottom: 0, left: 50 }}
     >
       <VictoryAxis
         label="Time"
