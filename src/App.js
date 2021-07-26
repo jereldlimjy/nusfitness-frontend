@@ -48,12 +48,12 @@ const App = () => {
   const [alert, setAlert] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const handleAlert = (msg, type) => {
+  const handleAlert = (msg, type, time = 3000) => {
     setAlert({ msg, type });
 
     setTimeout(() => {
       setAlert(null);
-    }, 3000);
+    }, time);
   };
 
   useEffect(() => {
