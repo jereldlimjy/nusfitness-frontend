@@ -306,6 +306,8 @@ const Booking = ({ handleAlert }) => {
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
+      setSelectedSlot({});
+
       if (submitValue === "Cancel") {
         const url = `${
           window.location.hostname === "local.nusfitness.com"
@@ -344,7 +346,6 @@ const Booking = ({ handleAlert }) => {
                 "error"
               );
             }
-            setSelectedSlot({});
             return response.json();
           })
           .then((data) => {
@@ -393,7 +394,6 @@ const Booking = ({ handleAlert }) => {
                 setLoading(false);
                 handleAlert("Slot has been fully booked.", "error");
               }
-              setSelectedSlot({});
             })
             .catch((err) => {
               console.log(err);
@@ -555,7 +555,7 @@ const Booking = ({ handleAlert }) => {
         {loading ? (
           <Box display="flex" flexDirection="column" alignItems="center" mt={3}>
             <CircularProgress className={classes.circularProgress} />
-            <Typography variant="h5">Processing Your Request...</Typography>
+            <Typography variant="h5">Loading bookings page...</Typography>
           </Box>
         ) : (
           <form onSubmit={handleClickOpen}>
