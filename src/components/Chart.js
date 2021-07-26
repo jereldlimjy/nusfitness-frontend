@@ -51,7 +51,7 @@ const Chart = ({ setTime, data, chartTitle }) => {
       <VictoryLabel
         text={chartTitle}
         x={450}
-        y={-5}
+        y={-30}
         textAnchor="middle"
         style={{ fontSize: 18 }}
       />
