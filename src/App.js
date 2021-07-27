@@ -1,5 +1,10 @@
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import { lightBlue } from "@material-ui/core/colors";
+import { Box, CircularProgress, Typography } from "@material-ui/core";
+import {
+  createMuiTheme,
+  MuiThemeProvider,
+  makeStyles,
+} from "@material-ui/core/styles";
+import { lightBlue, blueGrey } from "@material-ui/core/colors";
 import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
@@ -44,7 +49,16 @@ const theme = createMuiTheme({
   },
 });
 
+const useStyles = makeStyles((theme) => ({
+  circularProgress: {
+    marginBottom: theme.spacing(1.5),
+    color: blueGrey[200],
+  },
+}));
+
 const App = () => {
+  const classes = useStyles();
+
   const [alert, setAlert] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -82,44 +96,52 @@ const App = () => {
   }, []);
 
   return (
-    <MuiThemeProvider theme={theme}>
-      <Router basename={process.env.PUBLIC_URL}>
-        <div className="App">
-          <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-          <Alert alert={alert} />
-          <Switch>
-            <Route exact path="/dashboard">
-              <Dashboard />
-            </Route>
-            <Route exact path="/profile">
-              <Profile handleAlert={handleAlert} loggedIn={loggedIn} />
-            </Route>
-            <Route exact path="/register">
-              <Register
-                handleAlert={handleAlert}
-                loggedIn={loggedIn}
-                setLoggedIn={setLoggedIn}
-              />
-            </Route>
-            <Route exact path="/login">
-              <Login
-                handleAlert={handleAlert}
-                loggedIn={loggedIn}
-                setLoggedIn={setLoggedIn}
-              />
-            </Route>
-            <Route exact path="/">
-              <Home
-                handleAlert={handleAlert}
-                loggedIn={loggedIn}
-                setLoggedIn={setLoggedIn}
-                loading={loading}
-              />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-    </MuiThemeProvider>
+    <>
+      {loading ? (
+        <Box display="flex" flexDirection="column" alignItems="center" mt={3}>
+          <CircularProgress className={classes.circularProgress} />
+          <Typography variant="h5">Loading NUSFitness...</Typography>
+        </Box>
+      ) : (
+        <MuiThemeProvider theme={theme}>
+          <Router basename={process.env.PUBLIC_URL}>
+            <div className="App">
+              <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+              <Alert alert={alert} />
+              <Switch>
+                <Route exact path="/dashboard">
+                  <Dashboard />
+                </Route>
+                <Route exact path="/profile">
+                  <Profile handleAlert={handleAlert} loggedIn={loggedIn} />
+                </Route>
+                <Route exact path="/register">
+                  <Register
+                    handleAlert={handleAlert}
+                    loggedIn={loggedIn}
+                    setLoggedIn={setLoggedIn}
+                  />
+                </Route>
+                <Route exact path="/login">
+                  <Login
+                    handleAlert={handleAlert}
+                    loggedIn={loggedIn}
+                    setLoggedIn={setLoggedIn}
+                  />
+                </Route>
+                <Route exact path="/">
+                  <Home
+                    handleAlert={handleAlert}
+                    loggedIn={loggedIn}
+                    setLoggedIn={setLoggedIn}
+                  />
+                </Route>
+              </Switch>
+            </div>
+          </Router>
+        </MuiThemeProvider>
+      )}
+    </>
   );
 };
 
