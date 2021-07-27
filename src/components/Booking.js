@@ -327,6 +327,29 @@ const Booking = ({ handleAlert }) => {
     }
   };
 
+  // Retrieve all booked slots
+  const getAllBookedSlots = async () => {
+    try {
+      const url = `${
+        window.location.hostname === "local.nusfitness.com"
+          ? "http://local.nusfitness.com:5000/"
+          : "https://salty-reaches-24995.herokuapp.com/"
+      }bookedSlots`;
+
+      const res = await fetch(url, {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+      const data = await res.json();
+      setAllBookedSlots(
+        data.map((e) => ({ facility: e.facility, date: new Date(e.date) }))
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // Retrieve slots left
   const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const getSlotsLeft = async () => {
@@ -360,6 +383,7 @@ const Booking = ({ handleAlert }) => {
   useEffect(async () => {
     setLoading(true);
     await getBookedSlots();
+    await getAllBookedSlots();
     await getSlotsLeft();
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -370,29 +394,6 @@ const Booking = ({ handleAlert }) => {
     async (e) => {
       e.preventDefault();
       setSelectedSlot({});
-
-      // Retrieve all booked slots
-      const getAllBookedSlots = async () => {
-        try {
-          const url = `${
-            window.location.hostname === "local.nusfitness.com"
-              ? "http://local.nusfitness.com:5000/"
-              : "https://salty-reaches-24995.herokuapp.com/"
-          }bookedSlots`;
-
-          const res = await fetch(url, {
-            method: "post",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          });
-          const data = await res.json();
-          setAllBookedSlots(
-            data.map((e) => ({ facility: e.facility, date: new Date(e.date) }))
-          );
-        } catch (err) {
-          console.log(err);
-        }
-      };
 
       if (submitValue === "Cancel") {
         try {
