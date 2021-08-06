@@ -6,6 +6,7 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import { lightBlue } from "@material-ui/core/colors";
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
@@ -28,6 +29,12 @@ const useStyles = makeStyles((theme) => ({
   helperText: {
     textAlign: "center",
     marginTop: theme.spacing(2),
+  },
+  button: {
+    backgroundColor: lightBlue[600],
+    "&:hover": {
+      backgroundColor: lightBlue[800],
+    },
   },
   link: {
     color: "#EF7C00",
@@ -69,7 +76,11 @@ const Register = ({ handleAlert, loggedIn, setLoggedIn }) => {
       .then((response) => response.json())
       .then((user) => {
         if (user._id) {
-          handleAlert("Successfully registered! Head to the profile section to sync with telegram!", "info");
+          handleAlert(
+            "Successfully registered! Head to the profile section to sync with telegram!",
+            "info",
+            7000
+          );
           setLoggedIn(true);
           history.push("/");
         } else {
@@ -114,6 +125,7 @@ const Register = ({ handleAlert, loggedIn, setLoggedIn }) => {
           type="submit"
           onSubmit={onSubmit}
           disableElevation
+          className={classes.button}
         >
           Register
         </Button>

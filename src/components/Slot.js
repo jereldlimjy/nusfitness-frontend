@@ -14,13 +14,13 @@ const useStyles = makeStyles((theme) => ({
       color: "rgb(170, 170, 170)",
     },
     "&[booked='true'] ~ label": {
-      backgroundColor: orange[400],
+      backgroundColor: blueGrey[200],
     },
     "&[booked='true']:checked ~ label": {
-      backgroundColor: blueGrey[400],
+      backgroundColor: orange[400],
     },
     "&:checked ~ label": {
-      backgroundColor: blueGrey[200],
+      backgroundColor: orange[400],
     },
   },
   slotLabel: {

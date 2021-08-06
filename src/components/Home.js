@@ -4,12 +4,9 @@ import React from "react";
 import Booking from "./Booking";
 import Dashboard from "./Dashboard";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-  },
-}));
+const useStyles = makeStyles((theme) => ({}));
 
-const Home = ({ handleAlert, loggedIn, setLoggedIn }) => {
+const Home = ({ handleAlert, loggedIn, loading }) => {
   const classes = useStyles();
 
   return (

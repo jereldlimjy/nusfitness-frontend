@@ -1,7 +1,7 @@
 import {
   Avatar,
   Box,
-  Chip, 
+  Chip,
   CircularProgress,
   Paper,
   Table,
@@ -12,9 +12,9 @@ import {
   TableRow,
   Typography
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import { blueGrey } from "@material-ui/core/colors";
-import { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { useEffect, useMemo, useState } from "react";
 import Dashboard from "./Dashboard";
 import TelegramLogin from "./TelegramLogin";
   
@@ -63,9 +63,13 @@ const useStyles = makeStyles((theme) => ({
 const Profile = ({ handleAlert, loggedIn }) => {
   const classes = useStyles();
   const [slots, setSlots] = useState([]);
-  const [loading, setLoading] = useState();
+  const [loadingSlots, setLoadingSlots] = useState();
+  const [loadingCredits, setLoadingCredits] = useState();
+  const [loadingProfile, setLoadingProfile] = useState();
   const [profile, setProfile] = useState({});
   const [creditsLeft, setCreditsLeft] = useState();
+
+  const loading = useMemo(() => loadingSlots || loadingCredits || loadingProfile, [loadingSlots, loadingCredits, loadingProfile]);
 
   // Retrieve booked slots
   useEffect(() => {
@@ -75,7 +79,7 @@ const Profile = ({ handleAlert, loggedIn }) => {
         : "https://salty-reaches-24995.herokuapp.com/"
     }bookedSlots`;
 
-    setLoading(true);
+    setLoadingSlots(true);
 
     fetch(url, {
       method: "post",
@@ -87,10 +91,10 @@ const Profile = ({ handleAlert, loggedIn }) => {
         setSlots(
           res.map((e) => ({ facility: e.facility, date: new Date(e.date) }))
         )
-        setLoading(false);
+        setLoadingSlots(false);
       })
       .catch((err) => {
-        setLoading(false);
+        setLoadingSlots(false);
         console.log(err);
       });
   }, []);
@@ -103,6 +107,8 @@ const Profile = ({ handleAlert, loggedIn }) => {
         : "https://salty-reaches-24995.herokuapp.com/"
     }profile`;
 
+    setLoadingProfile(true);
+
     fetch(url, {
       method: "get",
       headers: { "Content-Type": "application/json" },
@@ -111,9 +117,10 @@ const Profile = ({ handleAlert, loggedIn }) => {
       .then(res => res.json())
       .then(data => {
         setProfile(data);
-        console.log(profile);
+        setLoadingProfile(false);
       })
       .catch((err) => {
+        setLoadingProfile(false);
         console.log(err);
       });
 
@@ -129,6 +136,8 @@ const Profile = ({ handleAlert, loggedIn }) => {
       : "https://salty-reaches-24995.herokuapp.com/"
     }creditsLeft`;
 
+    setLoadingCredits(true);
+
     const res = await fetch(url, {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -138,6 +147,7 @@ const Profile = ({ handleAlert, loggedIn }) => {
     const data = await res.json();
 
     setCreditsLeft(data.credits);
+    setLoadingCredits(false);
     }
 
     getCreditsLeft();
@@ -149,7 +159,11 @@ const Profile = ({ handleAlert, loggedIn }) => {
       {!loggedIn ? (
         <Dashboard />
       ) : (
-        <Box display="flex" justifyContent="center" className={classes.container} alignItems="flex-start">
+        loading
+          ? <Box display="flex" mt={1.5} justifyContent="center">
+              <CircularProgress className={classes.circularProgress} />
+            </Box>
+          : <Box display="flex" justifyContent="center" className={classes.container} alignItems="flex-start">
           {/* Profile info and telegram */}
           <Box ml={2} mr={2} flex={3} display="flex" flexDirection="column">
             <Box display="flex" alignItems="center" flexDirection="column" className={classes.profileBox}>
@@ -207,15 +221,10 @@ const Profile = ({ handleAlert, loggedIn }) => {
               </TableBody>
           </Table>
           </TableContainer>
-          {loading &&
-          <Box display="flex" mt={1.5} justifyContent="center">
-            <CircularProgress className={classes.circularProgress} />
-          </Box>
-          }
-          {!loading && !slots.length &&
-          <Box display="flex" mt={1.5} justifyContent="center">
-            <span>No bookings found.</span>
-          </Box>
+          {!slots.length &&
+            <Box display="flex" mt={1.5} justifyContent="center">
+              <span>No bookings found.</span>
+            </Box>
           }
         </Box>
         </Box>
