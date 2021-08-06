@@ -1,10 +1,11 @@
+import { Card } from "@material-ui/core";
+import { blueGrey, orange } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
-import { useEffect, useState } from "react";
 import { addHours } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    border: "1px solid #EF7C00",
+    // border: "1px solid #EF7C00",
     margin: theme.spacing(0.5),
   },
   slot: {
@@ -13,13 +14,13 @@ const useStyles = makeStyles((theme) => ({
       color: "rgb(170, 170, 170)",
     },
     "&[booked='true'] ~ label": {
-      backgroundColor: "forestgreen",
+      backgroundColor: blueGrey[200],
     },
     "&[booked='true']:checked ~ label": {
-      backgroundColor: "#ef7c00",
+      backgroundColor: orange[400],
     },
     "&:checked ~ label": {
-      backgroundColor: "#ef7c00",
+      backgroundColor: orange[400],
     },
   },
   slotLabel: {
@@ -32,33 +33,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Slot = ({ facility, date, handleChange, checked, booked }) => {
+const Slot = ({ date, handleChange, checked, booked, slotsLeft }) => {
   const classes = useStyles();
-  const [slotsLeft, setSlotsLeft] = useState(20);
-  const slotsCap = 20; // TODO: different across facilities
-
-  useEffect(() => {
-    const url = `${
-      window.location.hostname === "localhost"
-        ? "http://localhost:5000/"
-        : "https://salty-reaches-24995.herokuapp.com/"
-    }slots`;
-
-    const fetchSlotsCount = async () => {
-      const res = await fetch(url, {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          facility,
-          date,
-        }),
-        credentials: "include",
-      });
-      const slotsCount = await res.json();
-      setSlotsLeft(slotsCap - slotsCount);
-    };
-    fetchSlotsCount();
-  }, [checked]);
 
   // Disable current day slots whose time has elapsed
   const slotTime = addHours(date, 1); // + 1 since the slot can still be booked in the 1h gap
@@ -72,7 +48,7 @@ const Slot = ({ facility, date, handleChange, checked, booked }) => {
   const currentTime = new Date().getTime();
 
   return (
-    <div className={classes.root}>
+    <Card className={classes.root}>
       <input
         type="checkbox"
         className={classes.slot}
@@ -80,7 +56,7 @@ const Slot = ({ facility, date, handleChange, checked, booked }) => {
         date={date}
         onChange={handleChange}
         checked={checked}
-        disabled={slotsLeft <= 0 || slotTime <= currentTime}
+        disabled={slotTime <= currentTime}
         booked={booked.toString()}
       />
       <label className={classes.slotLabel} htmlFor={date}>
@@ -90,7 +66,7 @@ const Slot = ({ facility, date, handleChange, checked, booked }) => {
         className={classes.slotLabel}
         htmlFor={date}
       >{`${slotsLeft} Left`}</label>
-    </div>
+    </Card>
   );
 };
 

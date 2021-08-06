@@ -9,7 +9,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { addDays } from "date-fns";
@@ -21,6 +21,9 @@ import Chart from "./Chart";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: "column",
+    },
     padding: theme.spacing(2),
     "& .MuiCheckbox-colorPrimary.Mui-checked": {
       color: "rgb(61, 145, 255)",
@@ -30,7 +33,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     width: "100%",
   },
-  selectButton: {},
+  selectButton: {
+    backgroundColor: "rgb(61, 145, 255)",
+  },
 }));
 
 const Dashboard = () => {
@@ -55,7 +60,7 @@ const Dashboard = () => {
   ];
   const dayGroup = ["SELECT ALL", "REMOVE ALL", "WEEKDAYS", "WEEKENDS"];
 
-  // Set hour and minute of today
+  // Set time of current date
   const setTime = (h, m) => {
     const date = new Date();
     date.setHours(h, m, 0, 0);
@@ -72,6 +77,7 @@ const Dashboard = () => {
     },
   ]);
   const [dayOfWeek, setDayOfWeek] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const [chartTitle, setChartTitle] = useState("");
 
   // Changing facility
   const handleFacilityChange = (e) => {
@@ -105,6 +111,8 @@ const Dashboard = () => {
       case "WEEKENDS":
         setDayOfWeek([1, 7]);
         break;
+      default:
+        break;
     }
   };
 
@@ -115,10 +123,11 @@ const Dashboard = () => {
     const endDate = addDays(dateRange.endDate, 1); // endDate is 00:00 of end date
 
     const url = `${
-      window.location.hostname === "localhost"
-        ? "http://localhost:5000/"
+      window.location.hostname === "local.nusfitness.com"
+        ? "http://local.nusfitness.com:5000/"
         : "https://salty-reaches-24995.herokuapp.com/"
     }traffic`;
+    
     fetch(url, {
       method: "post",
       headers: {
@@ -129,6 +138,7 @@ const Dashboard = () => {
         date: { $gte: startDate, $lte: endDate },
         day: dayOfWeek,
       }),
+      credentials: "include",
     })
       .then((res) => res.json())
       .then((res) =>
@@ -139,13 +149,20 @@ const Dashboard = () => {
           }))
         )
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [facility, selectedDates, dayOfWeek]);
+
+  useEffect(() => {
+    // console.log(facility);
+    // console.log(selectedDates);
+    // console.log(selectedDates[0].startDate.toDateString());
+    setChartTitle(
+      `${facility}\n${selectedDates[0].startDate.toDateString()} to ${selectedDates[0].endDate.toDateString()} `
+    );
   }, [facility, selectedDates, dayOfWeek]);
 
   return (
-    <Box display="flex">
-      <Box flex="3 0 0">
-        <Chart setTime={setTime} data={data} />
-      </Box>
+    <Box display="flex" className={classes.root}>
       <Box
         display="flex"
         flex="1 1 0"
@@ -159,6 +176,7 @@ const Dashboard = () => {
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="facility-label">Select Facility</InputLabel>
             <Select
+              value={facility}
               labelId="facility-label"
               id="facility"
               onChange={handleFacilityChange}
@@ -216,6 +234,9 @@ const Dashboard = () => {
             </Grid>
           ))}
         </Grid>
+      </Box>
+      <Box flex="3 0 0">
+        <Chart setTime={setTime} data={data} chartTitle={chartTitle} />
       </Box>
     </Box>
   );

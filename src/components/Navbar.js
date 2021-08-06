@@ -1,10 +1,11 @@
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
+import { lightBlue } from "@material-ui/core/colors";
+import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,14 +16,14 @@ const useStyles = makeStyles((theme) => ({
   },
   titleLink: {
     textDecoration: "none",
-    color: "#EF7C00",
+    color: "white",
   },
   link: {
     textDecoration: "none",
     color: "white",
   },
   appBar: {
-    backgroundColor: "#003D7C",
+    backgroundColor: lightBlue[700],
   },
 }));
 
@@ -32,8 +33,8 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
   const handleLogout = (e) => {
     e.preventDefault();
     const url = `${
-      window.location.hostname === "localhost"
-        ? "http://localhost:5000/"
+      window.location.hostname === "local.nusfitness.com"
+        ? "http://local.nusfitness.com:5000/"
         : "https://salty-reaches-24995.herokuapp.com/"
     }logout`;
     fetch(url, {
@@ -54,13 +55,18 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
           {loggedIn ? (
             <Fragment>
               <Button>
+                <Link to="/" className={classes.link}>
+                  Home
+                </Link>
+              </Button>
+              <Button>
                 <Link to="/dashboard" className={classes.link}>
                   Dashboard
                 </Link>
               </Button>
               <Button>
-                <Link to="/bookings" className={classes.link}>
-                  Bookings
+                <Link to="/profile" className={classes.link}>
+                  Profile
                 </Link>
               </Button>
               <Button>

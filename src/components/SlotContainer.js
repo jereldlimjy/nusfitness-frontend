@@ -20,6 +20,7 @@ const SlotContainer = ({
   handleChange,
   selectedSlot,
   bookedSlots,
+  slotCount,
 }) => {
   const classes = useStyles();
 
@@ -33,10 +34,20 @@ const SlotContainer = ({
           const date = new Date(assignedDate);
           date.setHours(hour, minute, 0, 0);
 
+          const maxCap = 40; // adjust depending on facility
+          let slotsLeft = maxCap;
+
+          // Retrieve number of slots left
+          const matchingSlot = slotCount.find(
+            (e) => e.date.getTime() === date.getTime()
+          );
+          if (matchingSlot) {
+            slotsLeft = maxCap - matchingSlot.count;
+          }
+
           return (
             <Slot
-              key={date.toLocaleString() + facility}
-              facility={facility}
+              key={date.toLocaleString()}
               date={date}
               handleChange={handleChange}
               checked={
@@ -48,6 +59,7 @@ const SlotContainer = ({
                   (slot) => slot.date.getTime() === date.getTime()
                 ).length > 0
               }
+              slotsLeft={slotsLeft}
             />
           );
         })}
