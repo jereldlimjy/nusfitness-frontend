@@ -248,11 +248,7 @@ const Booking = ({ handleAlert }) => {
 
   useEffect(() => {
     async function getCreditsLeft() {
-      const url = `${
-        window.location.hostname === "local.nusfitness.com"
-          ? "http://local.nusfitness.com:5000/"
-          : "https://salty-reaches-24995.herokuapp.com/"
-      }creditsLeft`;
+      const url = `${BACKEND_URL}/creditsLeft`;
 
       setLoading(true);
 
@@ -304,11 +300,7 @@ const Booking = ({ handleAlert }) => {
   // Retrieve booked slots
   const getBookedSlots = async () => {
     try {
-      const url = `${
-        window.location.hostname === "local.nusfitness.com"
-          ? "http://local.nusfitness.com:5000/"
-          : "https://salty-reaches-24995.herokuapp.com/"
-      }bookedSlots`;
+      const url = `${BACKEND_URL}/bookedSlots`;
 
       const res = await fetch(url, {
         method: "post",
@@ -330,11 +322,7 @@ const Booking = ({ handleAlert }) => {
   // Retrieve all booked slots
   const getAllBookedSlots = async () => {
     try {
-      const url = `${
-        window.location.hostname === "local.nusfitness.com"
-          ? "http://local.nusfitness.com:5000/"
-          : "https://salty-reaches-24995.herokuapp.com/"
-      }bookedSlots`;
+      const url = `${BACKEND_URL}/bookedSlots`;
 
       const res = await fetch(url, {
         method: "post",
@@ -354,11 +342,7 @@ const Booking = ({ handleAlert }) => {
   const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const getSlotsLeft = async () => {
     try {
-      const url = `${
-        window.location.hostname === "local.nusfitness.com"
-          ? "http://local.nusfitness.com:5000/"
-          : "https://salty-reaches-24995.herokuapp.com/"
-      }slots`;
+      const url = `${BACKEND_URL}/slots`;
 
       const res = await fetch(url, {
         method: "post",
@@ -397,11 +381,7 @@ const Booking = ({ handleAlert }) => {
 
       if (submitValue === "Cancel") {
         try {
-          const url = `${
-            window.location.hostname === "local.nusfitness.com"
-              ? "http://local.nusfitness.com:5000/"
-              : "https://salty-reaches-24995.herokuapp.com/"
-          }cancel`;
+          const url = `${BACKEND_URL}/cancel`;
 
           setLoading(true);
 
@@ -444,11 +424,7 @@ const Booking = ({ handleAlert }) => {
         }
       } else {
         try {
-          const url = `${
-            window.location.hostname === "local.nusfitness.com"
-              ? "http://local.nusfitness.com:5000"
-              : "https://salty-reaches-24995.herokuapp.com"
-          }`;
+          const url = `${BACKEND_URL}`;
 
           setLoading(true);
 

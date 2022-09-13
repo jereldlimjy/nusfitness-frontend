@@ -10,22 +10,22 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { blueGrey } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import { useEffect, useMemo, useState } from "react";
 import Dashboard from "./Dashboard";
 import TelegramLogin from "./TelegramLogin";
-  
+
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(4),
   },
   container: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       flexDirection: "column",
-      alignItems: "inherit"
+      alignItems: "inherit",
     },
   },
   tableContainer: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
   circularProgress: {
     margin: "0 auto",
-    color: blueGrey[200]
+    color: blueGrey[200],
   },
   profileBox: {
     border: "1px solid grey",
@@ -43,23 +43,23 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
     height: 200,
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
   },
   info: {
     marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
   },
   chip: {
     marginTop: theme.spacing(2),
   },
   telegramLogin: {
     marginTop: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: {
-      marginBottom: theme.spacing(2)
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: theme.spacing(2),
     },
-  }
+  },
 }));
-  
+
 const Profile = ({ handleAlert, loggedIn }) => {
   const classes = useStyles();
   const [slots, setSlots] = useState([]);
@@ -69,15 +69,14 @@ const Profile = ({ handleAlert, loggedIn }) => {
   const [profile, setProfile] = useState({});
   const [creditsLeft, setCreditsLeft] = useState();
 
-  const loading = useMemo(() => loadingSlots || loadingCredits || loadingProfile, [loadingSlots, loadingCredits, loadingProfile]);
+  const loading = useMemo(
+    () => loadingSlots || loadingCredits || loadingProfile,
+    [loadingSlots, loadingCredits, loadingProfile]
+  );
 
   // Retrieve booked slots
   useEffect(() => {
-    const url = `${
-      window.location.hostname === "local.nusfitness.com"
-        ? "http://local.nusfitness.com:5000/"
-        : "https://salty-reaches-24995.herokuapp.com/"
-    }bookedSlots`;
+    const url = `${BACKEND_URL}/bookedSlots`;
 
     setLoadingSlots(true);
 
@@ -90,7 +89,7 @@ const Profile = ({ handleAlert, loggedIn }) => {
       .then((res) => {
         setSlots(
           res.map((e) => ({ facility: e.facility, date: new Date(e.date) }))
-        )
+        );
         setLoadingSlots(false);
       })
       .catch((err) => {
@@ -101,11 +100,7 @@ const Profile = ({ handleAlert, loggedIn }) => {
 
   // Retrieve profile info
   useEffect(() => {
-    const url = `${
-      window.location.hostname === "local.nusfitness.com"
-        ? "http://local.nusfitness.com:5000/"
-        : "https://salty-reaches-24995.herokuapp.com/"
-    }profile`;
+    const url = `${BACKEND_URL}/profile`;
 
     setLoadingProfile(true);
 
@@ -114,8 +109,8 @@ const Profile = ({ handleAlert, loggedIn }) => {
       headers: { "Content-Type": "application/json" },
       credentials: "include",
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setProfile(data);
         setLoadingProfile(false);
       })
@@ -130,54 +125,81 @@ const Profile = ({ handleAlert, loggedIn }) => {
   // Get credits left
   useEffect(() => {
     async function getCreditsLeft() {
-    const url = `${
-      window.location.hostname === "local.nusfitness.com"
-      ? "http://local.nusfitness.com:5000/"
-      : "https://salty-reaches-24995.herokuapp.com/"
-    }creditsLeft`;
+      const url = `${BACKEND_URL}/creditsLeft`;
 
-    setLoadingCredits(true);
+      setLoadingCredits(true);
 
-    const res = await fetch(url, {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
+      const res = await fetch(url, {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    setCreditsLeft(data.credits);
-    setLoadingCredits(false);
+      setCreditsLeft(data.credits);
+      setLoadingCredits(false);
     }
 
     getCreditsLeft();
   }, []);
 
-  
   return (
     <div className={classes.root}>
       {!loggedIn ? (
         <Dashboard />
+      ) : loading ? (
+        <Box display="flex" mt={1.5} justifyContent="center">
+          <CircularProgress className={classes.circularProgress} />
+        </Box>
       ) : (
-        loading
-          ? <Box display="flex" mt={1.5} justifyContent="center">
-              <CircularProgress className={classes.circularProgress} />
-            </Box>
-          : <Box display="flex" justifyContent="center" className={classes.container} alignItems="flex-start">
+        <Box
+          display="flex"
+          justifyContent="center"
+          className={classes.container}
+          alignItems="flex-start"
+        >
           {/* Profile info and telegram */}
           <Box ml={2} mr={2} flex={3} display="flex" flexDirection="column">
-            <Box display="flex" alignItems="center" flexDirection="column" className={classes.profileBox}>
-              <Avatar src={`https://robohash.org/${profile.email}?set=set5`} className={classes.avatar} />
+            <Box
+              display="flex"
+              alignItems="center"
+              flexDirection="column"
+              className={classes.profileBox}
+            >
+              <Avatar
+                src={`https://robohash.org/${profile.email}?set=set5`}
+                className={classes.avatar}
+              />
               <Typography variant="h6">{profile.email}</Typography>
 
-              <Box className={classes.info} display="flex" flexDirection="column" alignItems="center">
-                  <Typography><strong>Joined:</strong> {new Date(profile.joined).toLocaleDateString()}</Typography>
+              <Box
+                className={classes.info}
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+              >
+                <Typography>
+                  <strong>Joined:</strong>{" "}
+                  {new Date(profile.joined).toLocaleDateString()}
+                </Typography>
               </Box>
             </Box>
 
-            <Chip className={classes.chip} label={<Typography><strong>Remaining credits this week:</strong> {creditsLeft}</Typography>} />
+            <Chip
+              className={classes.chip}
+              label={
+                <Typography>
+                  <strong>Remaining credits this week:</strong> {creditsLeft}
+                </Typography>
+              }
+            />
 
-            <Box display="flex" justifyContent="center" className={classes.telegramLogin}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              className={classes.telegramLogin}
+            >
               <TelegramLogin />
             </Box>
           </Box>
@@ -185,48 +207,50 @@ const Profile = ({ handleAlert, loggedIn }) => {
           {/* Bookings */}
           <Box ml={2} mr={2} display="flex" flexDirection="column" flex={7}>
             <Box display="flex" justifyContent="center" mb={1}>
-                <Typography variant="h4">My Bookings</Typography>
+              <Typography variant="h4">My Bookings</Typography>
             </Box>
-            <TableContainer className={classes.tableContainer} component={Paper}>
-            <Table>
-              <TableHead>
-              <TableRow>
-                <TableCell>Facility</TableCell>
-                <TableCell align="right">Date</TableCell>
-                <TableCell align="right">Time</TableCell>
-              </TableRow>
-              </TableHead>
-              <TableBody>
-              {!loading &&
-                slots.map((slot) => (
-                <TableRow key={slot.facility}>
-                  <TableCell component="th" scope="row">
-                  {slot.facility}
-                  </TableCell>
-                  <TableCell align="right">
-                  {slot.date.toDateString()}
-                  </TableCell>
-                  <TableCell align="right">
-                  {slot.date
-                    .toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false,
-                    })
-                    .replace(":", "")}
-                  </TableCell>
-                </TableRow>
-                ))
-              }
-              </TableBody>
-          </Table>
-          </TableContainer>
-          {!slots.length &&
-            <Box display="flex" mt={1.5} justifyContent="center">
-              <span>No bookings found.</span>
-            </Box>
-          }
-        </Box>
+            <TableContainer
+              className={classes.tableContainer}
+              component={Paper}
+            >
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Facility</TableCell>
+                    <TableCell align="right">Date</TableCell>
+                    <TableCell align="right">Time</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {!loading &&
+                    slots.map((slot) => (
+                      <TableRow key={slot.facility}>
+                        <TableCell component="th" scope="row">
+                          {slot.facility}
+                        </TableCell>
+                        <TableCell align="right">
+                          {slot.date.toDateString()}
+                        </TableCell>
+                        <TableCell align="right">
+                          {slot.date
+                            .toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: false,
+                            })
+                            .replace(":", "")}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {!slots.length && (
+              <Box display="flex" mt={1.5} justifyContent="center">
+                <span>No bookings found.</span>
+              </Box>
+            )}
+          </Box>
         </Box>
       )}
     </div>
@@ -234,4 +258,3 @@ const Profile = ({ handleAlert, loggedIn }) => {
 };
 
 export default Profile;
-  

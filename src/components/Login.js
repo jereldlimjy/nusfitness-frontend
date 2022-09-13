@@ -50,11 +50,7 @@ const Login = ({ handleAlert, loggedIn, setLoggedIn }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const url = `${
-      window.location.hostname === "local.nusfitness.com"
-        ? "http://local.nusfitness.com:5000/"
-        : "https://salty-reaches-24995.herokuapp.com/"
-    }login`;
+    const url = `${BACKEND_URL}/login`;
     fetch(url, {
       method: "post",
       headers: { "Content-Type": "application/json" },

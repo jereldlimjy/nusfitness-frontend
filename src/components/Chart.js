@@ -43,7 +43,7 @@ const Chart = ({ setTime, data, chartTitle }) => {
         />
       }
       minDomain={{ x: setTime(7, 0), y: 0 }}
-      maxDomain={{ x: setTime(22, 0), y: 40 }}
+      domainPadding={{ y: [0, 15] }}
       height={250}
       width={900}
       padding={{ top: 0, right: 25, bottom: 0, left: 50 }}

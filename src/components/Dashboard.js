@@ -9,7 +9,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { addDays } from "date-fns";
@@ -21,7 +21,7 @@ import Chart from "./Chart";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down("xs")]: {
       flexDirection: "column",
     },
     padding: theme.spacing(2),
@@ -122,12 +122,8 @@ const Dashboard = () => {
     const startDate = dateRange.startDate;
     const endDate = addDays(dateRange.endDate, 1); // endDate is 00:00 of end date
 
-    const url = `${
-      window.location.hostname === "local.nusfitness.com"
-        ? "http://local.nusfitness.com:5000/"
-        : "https://salty-reaches-24995.herokuapp.com/"
-    }traffic`;
-    
+    const url = `${BACKEND_URL}/traffic`;
+
     fetch(url, {
       method: "post",
       headers: {
