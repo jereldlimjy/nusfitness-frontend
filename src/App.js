@@ -72,7 +72,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    const url = `${BACKEND_URL}/isLoggedIn`;
+    const url = `${process.env.BACKEND_URL}/isLoggedIn`;
 
     setLoading(true);
 

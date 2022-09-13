@@ -50,7 +50,7 @@ const Login = ({ handleAlert, loggedIn, setLoggedIn }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const url = `${BACKEND_URL}/login`;
+    const url = `${process.env.BACKEND_URL}/login`;
     fetch(url, {
       method: "post",
       headers: { "Content-Type": "application/json" },

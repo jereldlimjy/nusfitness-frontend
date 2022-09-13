@@ -59,7 +59,7 @@ const Register = ({ handleAlert, loggedIn, setLoggedIn }) => {
       return;
     }
 
-    const url = `${BACKEND_URL}/register`;
+    const url = `${process.env.BACKEND_URL}/register`;
     fetch(url, {
       method: "post",
       headers: { "Content-Type": "application/json" },

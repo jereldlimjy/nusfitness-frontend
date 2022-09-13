@@ -248,7 +248,7 @@ const Booking = ({ handleAlert }) => {
 
   useEffect(() => {
     async function getCreditsLeft() {
-      const url = `${BACKEND_URL}/creditsLeft`;
+      const url = `${process.env.BACKEND_URL}/creditsLeft`;
 
       setLoading(true);
 
@@ -300,7 +300,7 @@ const Booking = ({ handleAlert }) => {
   // Retrieve booked slots
   const getBookedSlots = async () => {
     try {
-      const url = `${BACKEND_URL}/bookedSlots`;
+      const url = `${process.env.BACKEND_URL}/bookedSlots`;
 
       const res = await fetch(url, {
         method: "post",
@@ -322,7 +322,7 @@ const Booking = ({ handleAlert }) => {
   // Retrieve all booked slots
   const getAllBookedSlots = async () => {
     try {
-      const url = `${BACKEND_URL}/bookedSlots`;
+      const url = `${process.env.BACKEND_URL}/bookedSlots`;
 
       const res = await fetch(url, {
         method: "post",
@@ -342,7 +342,7 @@ const Booking = ({ handleAlert }) => {
   const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const getSlotsLeft = async () => {
     try {
-      const url = `${BACKEND_URL}/slots`;
+      const url = `${process.env.BACKEND_URL}/slots`;
 
       const res = await fetch(url, {
         method: "post",
@@ -381,7 +381,7 @@ const Booking = ({ handleAlert }) => {
 
       if (submitValue === "Cancel") {
         try {
-          const url = `${BACKEND_URL}/cancel`;
+          const url = `${process.env.BACKEND_URL}/cancel`;
 
           setLoading(true);
 
@@ -424,7 +424,7 @@ const Booking = ({ handleAlert }) => {
         }
       } else {
         try {
-          const url = `${BACKEND_URL}`;
+          const url = `${process.env.BACKEND_URL}`;
 
           setLoading(true);
 
