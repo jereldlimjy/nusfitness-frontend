@@ -2,7 +2,7 @@ import TelegramLoginButton from "react-telegram-login";
 
 const TelegramLogin = () => {
   const handleTelegramResponse = (response) => {
-    const url = `${BACKEND_URL}/telegram/login`;
+    const url = `${process.env.BACKEND_URL}/telegram/login`;
 
     fetch(url, {
       method: "post",

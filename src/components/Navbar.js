@@ -32,7 +32,7 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    const url = `${BACKEND_URL}/logout`;
+    const url = `${process.env.BACKEND_URL}/logout`;
     fetch(url, {
       credentials: "include",
     }).catch((err) => console.log(err));

@@ -76,7 +76,7 @@ const Profile = ({ handleAlert, loggedIn }) => {
 
   // Retrieve booked slots
   useEffect(() => {
-    const url = `${BACKEND_URL}/bookedSlots`;
+    const url = `${process.env.BACKEND_URL}/bookedSlots`;
 
     setLoadingSlots(true);
 
@@ -100,7 +100,7 @@ const Profile = ({ handleAlert, loggedIn }) => {
 
   // Retrieve profile info
   useEffect(() => {
-    const url = `${BACKEND_URL}/profile`;
+    const url = `${process.env.BACKEND_URL}/profile`;
 
     setLoadingProfile(true);
 
@@ -125,7 +125,7 @@ const Profile = ({ handleAlert, loggedIn }) => {
   // Get credits left
   useEffect(() => {
     async function getCreditsLeft() {
-      const url = `${BACKEND_URL}/creditsLeft`;
+      const url = `${process.env.BACKEND_URL}/creditsLeft`;
 
       setLoadingCredits(true);
 
