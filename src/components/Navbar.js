@@ -32,11 +32,7 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    const url = `${
-      window.location.hostname === "local.nusfitness.com"
-        ? "http://local.nusfitness.com:5000/"
-        : "https://salty-reaches-24995.herokuapp.com/"
-    }logout`;
+    const url = `${BACKEND_URL}/logout`;
     fetch(url, {
       credentials: "include",
     }).catch((err) => console.log(err));

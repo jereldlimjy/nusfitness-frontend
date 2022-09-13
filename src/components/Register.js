@@ -59,11 +59,7 @@ const Register = ({ handleAlert, loggedIn, setLoggedIn }) => {
       return;
     }
 
-    const url = `${
-      window.location.hostname === "local.nusfitness.com"
-        ? "http://local.nusfitness.com:5000/"
-        : "https://salty-reaches-24995.herokuapp.com/"
-    }register`;
+    const url = `${BACKEND_URL}/register`;
     fetch(url, {
       method: "post",
       headers: { "Content-Type": "application/json" },
