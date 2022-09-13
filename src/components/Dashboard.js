@@ -123,7 +123,7 @@ const Dashboard = () => {
     const endDate = addDays(dateRange.endDate, 1); // endDate is 00:00 of end date
 
     const url = `${process.env.REACT_APP_BACKEND_URL}/traffic`;
-    console.log(url);
+
     fetch(url, {
       method: "post",
       headers: {
